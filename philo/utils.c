@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/04/27 10:51:27 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/04/27 14:50:36 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,25 +31,30 @@ int	ft_atoi(char *str)
 	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{
-		nbr *= 10 + (str[i] - '0');
+		nbr = nbr * 10 + (str[i] - '0');
 		i++;
 	}
 	return (nbr * sig);
 }
 
-int	free_data(t_philos *data)
+int	free_data(t_data *data)
 {
 	int	i;
 
 	i = -1;
-	while (i < data->n)
+	while (++i < data->n)
+	{
 		pthread_mutex_destroy(&data->forks[i]->fork_mutex);
-	free(data->philos);
+		free(data->forks[i]);
+		free(data->philo[i]);
+	}
+	free(data->philo);
 	free(data->forks);
 	return (1);
 }
 
-void	*simulation(void)
+void	*simulation(void *philo)
 {
-	return ;
+	(void)philo;
+	return (0);
 }

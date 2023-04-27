@@ -1,7 +1,7 @@
 NAME	= philo
 SRC		= main.c utils.c
-CC		= cc
-CFLAGS	= -Wall -Werror -Wextra -g -pthread
+CC		= @cc
+CFLAGS	= -Wall -Werror -Wextra -g -lpthread
 
 all:		$(NAME)
 
@@ -10,10 +10,10 @@ $(NAME):	$(SRC)
 #$(CC) $(CFLAGS) $(^) -o $(@) -fsanitize=thread
 
 clean:
-			rm -f *.o
+			@rm -f *.o
 
 fclean:		clean
-			rm -f $(NAME)
+			@rm -f $(NAME)
 
 re:			fclean all
 

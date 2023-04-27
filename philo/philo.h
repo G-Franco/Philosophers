@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:57:11 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/04/27 10:51:18 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/04/27 14:03:20 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,17 @@ typedef struct s_forks
 	int				request;
 }					t_forks;
 
-typedef struct s_philos
+typedef struct s_philo
 {
-	pthread_t	**philos;
+	pthread_t	id;
+	int			n;
+	int			meals;
+	int			last_meal;
+}				t_philo;
+
+typedef struct s_data
+{
+	t_philo		**philo;
 	t_forks		**forks;
 	int			n;
 	int			ttdie;
@@ -36,16 +44,16 @@ typedef struct s_philos
 	int			ttsleep;
 	int			opt_eat;
 	int			sim_start;
-}				t_philos;
+}				t_data;
 
 /*main.c*/
 int		write_usage(void);
-int		usage(int ac, char **av, t_philos *data);
-int		prep_data(t_philos *data);
+int		usage(int ac, char **av, t_data *data);
+int		prep_data(t_data *data);
 
 /*utils.c*/
 int		ft_atoi(char *str);
-int		free_data(t_philos *data);
-void	*simulation(void);
+int		free_data(t_data *data);
+void	*simulation(void *philo);
 
 #endif

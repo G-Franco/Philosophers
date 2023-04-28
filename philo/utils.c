@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/04/28 09:48:09 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/04/28 13:02:57 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	free_data(t_data *data)
 	i = -1;
 	while (++i < data->n)
 	{
-		pthread_mutex_destroy(&data->forks[i]->fork_mutex);
+		pthread_mutex_destroy(data->forks[i]);
 		free(data->forks[i]);
 		free(data->philo[i]);
 	}

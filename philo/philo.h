@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:57:11 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/04/28 10:21:56 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/04/28 15:34:19 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,6 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <pthread.h>
-
-typedef struct s_forks
-{
-	pthread_mutex_t	fork_mutex;
-	int				request;
-}					t_forks;
 
 struct	s_data;
 typedef struct s_philo
@@ -40,7 +34,7 @@ typedef struct s_philo
 typedef struct s_data
 {
 	t_philo			**philo;
-	t_forks			**forks;
+	pthread_mutex_t	**forks;
 	int				n;
 	int				ttdie;
 	int				tteat;
@@ -61,6 +55,13 @@ int				free_data(t_data *data);
 unsigned long	get_time(void);
 
 /*simulation.c*/
+int				forks(t_philo *philo, pthread_mutex_t *fork1,
+					pthread_mutex_t *fork2);
+void			think(t_philo *philo);
+void			eat(t_philo *philo, pthread_mutex_t *fork1,
+					pthread_mutex_t *fork2);
+void			shleep(t_philo *philo);
+//int				dead(t_philo *philo);
 void			*simulation(void *philo);
 
 #endif

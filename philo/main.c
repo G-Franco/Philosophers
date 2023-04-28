@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/04/28 11:13:46 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/04/28 14:35:23 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,8 @@ int	prep_data(t_data *data)
 	i = -1;
 	while (++i < data->n)
 	{
-		if (pthread_mutex_init(&data->forks[i]->fork_mutex, 0))
+		if (pthread_mutex_init(data->forks[i], 0))
 			return (3);
-		data->forks[i]->request = 0;
 		data->philo[i]->meals = 0;
 		data->philo[i]->spot = i;
 		data->philo[i]->dead = 0;
@@ -72,6 +71,10 @@ int	start(t_data *data)
 			return (1);
 		pthread_join(data->philo[i]->id, 0);
 	}
+	/*CHECK WHICH IS BETTER*/
+	/* i = -1;
+	while (++i < data->n)
+		pthread_join(data->philo[i]->id, 0); */
 	return (0);
 }
 
@@ -84,14 +87,15 @@ int	main(int ac, char **av)
 		return (1);
 	i = -1;
 	data.philo = (t_philo **)malloc(sizeof(t_philo *) * (data.n));
-	data.forks = (t_forks **)malloc(sizeof(t_forks *) * (data.n));
+	data.forks = (pthread_mutex_t **)malloc(sizeof(pthread_mutex_t *)
+			* (data.n));
 	if (!data.philo || !data.forks)
 		return (free_data(&data));
 	i = -1;
 	while (++i < data.n)
 	{
 		data.philo[i] = (t_philo *)malloc(sizeof(t_philo));
-		data.forks[i] = (t_forks *)malloc(sizeof(t_forks));
+		data.forks[i] = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 		if (!data.philo[i] || !data.forks[i])
 			return (free_data(&data));
 	}

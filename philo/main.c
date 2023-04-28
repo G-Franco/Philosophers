@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/04/27 14:34:16 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/04/28 11:13:46 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	usage(int ac, char **av, t_data *data)
 	if (data->n < 1 || data->ttdie <= 0 || data->tteat <= 0
 		|| data->ttsleep <= 0 || data->opt_eat < 0)
 		return (write_usage());
-	data->sim_start = 0;
 	return (0);
 }
 
@@ -47,24 +46,31 @@ int	prep_data(t_data *data)
 {
 	int	i;
 
-	data->philo = (t_philo **)malloc(sizeof(t_philo *) * (data->n));
-	data->forks = (t_forks **)malloc(sizeof(t_forks *) * (data->n));
-	if (!data->philo || !data->forks)
-		return (1);
 	i = -1;
 	while (++i < data->n)
 	{
-		data->philo[i] = (t_philo *)malloc(sizeof(t_philo));
-		data->forks[i] = (t_forks *)malloc(sizeof(t_forks));
-	}
-	i = -1;
-	while (++i < data->n)
-	{
-		if (pthread_create(&data->philo[i]->id, 0, simulation, 0))
-			return (2);
 		if (pthread_mutex_init(&data->forks[i]->fork_mutex, 0))
 			return (3);
 		data->forks[i]->request = 0;
+		data->philo[i]->meals = 0;
+		data->philo[i]->spot = i;
+		data->philo[i]->dead = 0;
+		data->philo[i]->data = data;
+	}
+	return (0);
+}
+
+int	start(t_data *data)
+{
+	int	i;
+
+	i = -1;
+	data->start_time = get_time();
+	while (++i < data->n)
+	{
+		if (pthread_create(&data->philo[i]->id, 0, simulation, data->philo[i]))
+			return (1);
+		pthread_join(data->philo[i]->id, 0);
 	}
 	return (0);
 }
@@ -72,10 +78,26 @@ int	prep_data(t_data *data)
 int	main(int ac, char **av)
 {
 	t_data	data;
+	int		i;
 
 	if (usage(ac, av, &data))
 		return (1);
+	i = -1;
+	data.philo = (t_philo **)malloc(sizeof(t_philo *) * (data.n));
+	data.forks = (t_forks **)malloc(sizeof(t_forks *) * (data.n));
+	if (!data.philo || !data.forks)
+		return (free_data(&data));
+	i = -1;
+	while (++i < data.n)
+	{
+		data.philo[i] = (t_philo *)malloc(sizeof(t_philo));
+		data.forks[i] = (t_forks *)malloc(sizeof(t_forks));
+		if (!data.philo[i] || !data.forks[i])
+			return (free_data(&data));
+	}
 	if (prep_data(&data))
+		return (free_data(&data));
+	if (start(&data))
 		return (free_data(&data));
 	free_data(&data);
 	return (0);

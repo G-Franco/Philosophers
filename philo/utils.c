@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/04/27 14:50:36 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/04/28 09:48:09 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,11 @@ int	free_data(t_data *data)
 	return (1);
 }
 
-void	*simulation(void *philo)
+unsigned long	get_time(void)
 {
-	(void)philo;
-	return (0);
+	struct timeval	time;
+
+	gettimeofday(&time, 0);
+	return (time.tv_sec * (unsigned long)1000
+		+ (time.tv_usec / (unsigned long)1000));
 }

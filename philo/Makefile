@@ -1,13 +1,13 @@
 NAME	= philo
-SRC		= main.c utils.c
+SRC		= main.c simulation.c utils.c
 CC		= @cc
 CFLAGS	= -Wall -Werror -Wextra -g -lpthread
 
 all:		$(NAME)
 
 $(NAME):	$(SRC)
-			$(CC) $(CFLAGS) $(^) -o $(@) -fsanitize=address
-#$(CC) $(CFLAGS) $(^) -o $(@) -fsanitize=thread
+#$(CC) $(CFLAGS) $(^) -o $(@) -fsanitize=address
+			$(CC) $(CFLAGS) $(^) -o $(@) -fsanitize=thread
 
 clean:
 			@rm -f *.o

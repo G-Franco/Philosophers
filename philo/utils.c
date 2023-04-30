@@ -3,14 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/04/28 13:02:57 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/04/30 18:36:49 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	message(t_philo philo, unsigned long start_time, int n, char *msg)
+{
+	pthread_mutex_lock(philo->data->write);
+	printf("%lu %i %s\n", get_time() - start_time, n, msg);
+	pthread_mutex_unlock(philo->data->write);
+	return ;
+}
+
+int	check_int(int ac, char **av)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = -1;
+	while (++i < ac)
+	{
+		while (av[i][++j])
+		{
+			if (av[i][j] < '0' || av[i][j] > '9')
+				return (1);
+		}
+	}
+	return (0);
+}
 
 int	ft_atoi(char *str)
 {

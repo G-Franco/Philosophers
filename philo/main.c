@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/04/30 09:58:35 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/04/30 18:37:54 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	write_usage(void)
 
 int	usage(int ac, char **av, t_data *data)
 {
+	if (check_int(ac, av))
+		return (1);
 	if (ac < 5 || ac > 6 || !av[1] || !av[2] || !av[3] || !av[4])
 		return (write_usage());
 	data->n = ft_atoi(av[1]);
@@ -52,10 +54,11 @@ int	prep_data(t_data *data)
 		if (pthread_mutex_init(data->forks[i], 0))
 			return (3);
 		data->philo[i]->meals = 0;
-		data->philo[i]->spot = i;
+		data->philo[i]->spot = i + 1;
 		data->philo[i]->dead = 0;
 		data->philo[i]->data = data;
 	}
+	pthread_mutex_init(data->write, 0);
 	return (0);
 }
 
@@ -67,7 +70,8 @@ int	start(t_data *data)
 	data->start_time = get_time();
 	while (++i < data->n)
 	{
-		if (pthread_create(&data->philo[i]->id, 0, simulation, data->philo[i]))
+		if (pthread_create(&data->philo[i]->id, 0, simulation, data->philo[i])
+			|| pthread_create(&data->philo[i]->status, 0, status_monitor, data->philo[i]))
 			return (1);
 		//pthread_join(data->philo[i]->id, 0);
 	}

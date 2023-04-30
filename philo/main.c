@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/04/28 14:35:23 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/04/30 09:58:35 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,12 @@ int	start(t_data *data)
 	{
 		if (pthread_create(&data->philo[i]->id, 0, simulation, data->philo[i]))
 			return (1);
-		pthread_join(data->philo[i]->id, 0);
+		//pthread_join(data->philo[i]->id, 0);
 	}
 	/*CHECK WHICH IS BETTER*/
-	/* i = -1;
+	i = -1;
 	while (++i < data->n)
-		pthread_join(data->philo[i]->id, 0); */
+		pthread_join(data->philo[i]->id, 0);
 	return (0);
 }
 

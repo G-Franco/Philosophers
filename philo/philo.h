@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:57:11 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/04/28 15:34:19 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/04/30 11:32:26 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,11 @@ int				free_data(t_data *data);
 unsigned long	get_time(void);
 
 /*simulation.c*/
-int				forks(t_philo *philo, pthread_mutex_t *fork1,
-					pthread_mutex_t *fork2);
+void			message(unsigned long start_time, int n, int flag);
 void			think(t_philo *philo);
 void			eat(t_philo *philo, pthread_mutex_t *fork1,
 					pthread_mutex_t *fork2);
 void			shleep(t_philo *philo);
-//int				dead(t_philo *philo);
 void			*simulation(void *philo);
 
 #endif

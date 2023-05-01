@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/01 10:35:29 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/01 14:40:37 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ int	usage(int ac, char **av, t_data *data)
 	if (ac < 5 || ac > 6 || !av[1] || !av[2] || !av[3] || !av[4])
 		return (write_usage());
 	data->n = ft_atoi(av[1]);
-	data->ttdie = ft_atoi(av[2]);
-	data->tteat = ft_atoi(av[3]);
-	data->ttsleep = ft_atoi(av[4]);
+	data->ttdie = (unsigned long)ft_atoi(av[2]);
+	data->tteat = (unsigned long)ft_atoi(av[3]);
+	data->ttsleep = (unsigned long)ft_atoi(av[4]);
 	if (av[5])
 		data->opt_eat = ft_atoi(av[5]);
 	else
@@ -59,8 +59,8 @@ int	prep_data(t_data *data)
 	}
 	data->end = 0;
 	data->philos_full = 0;
-	pthread_mutex_init(data->write, 0);
-	pthread_mutex_init(data->meals, 0);
+	pthread_mutex_init(&data->write, 0);
+	pthread_mutex_init(&data->meals, 0);
 	return (0);
 }
 
@@ -72,6 +72,7 @@ int	start(t_data *data)
 	data->start_time = get_time();
 	while (++i < data->n)
 	{
+		data->philo[i]->last_meal = get_time() - data->start_time;
 		if (pthread_create(&data->philo[i]->id, 0, simulation, data->philo[i])
 			|| pthread_create(&data->philo[i]->status, 0, status_monitor, data->philo[i]))
 			return (1);

@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/01 10:37:12 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/01 14:49:12 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 void	message(t_philo *philo, unsigned long start_time, int n, char *msg)
 {
-	pthread_mutex_lock(philo->data->write);
+	pthread_mutex_lock(&philo->data->write);
 	printf("%lu %i %s\n", get_time() - start_time, n, msg);
-	if (!philo->data->end)
-		pthread_mutex_unlock(philo->data->write);
+	pthread_mutex_unlock(&philo->data->write);
 	return ;
 }
 
@@ -27,9 +26,9 @@ int	check_int(int ac, char **av)
 	int	j;
 
 	i = 0;
-	j = -1;
 	while (++i < ac)
 	{
+		j = -1;
 		while (av[i][++j])
 		{
 			if (av[i][j] < '0' || av[i][j] > '9')

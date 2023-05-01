@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:57:11 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/01 10:36:45 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/01 14:28:12 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ typedef struct s_data
 	pthread_mutex_t	**forks;
 	int				n;
 	int				end;
-	int				ttdie;
-	int				tteat;
-	int				ttsleep;
+	unsigned long	ttdie;
+	unsigned long	tteat;
+	unsigned long	ttsleep;
 	int				opt_eat;
 	int				philos_full;
 	pthread_mutex_t	write;
@@ -56,7 +56,7 @@ int				start(t_data *data);
 
 /*simulation.c*/
 void			*status_monitor(void *philo);
-void			think(t_philo *philo);
+void			think(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2);
 void			eat(t_philo *philo, pthread_mutex_t *fork1,	pthread_mutex_t *fork2);
 void			shleep(t_philo *philo);
 void			*simulation(void *philo);

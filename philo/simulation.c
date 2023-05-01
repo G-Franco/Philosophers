@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/01 10:41:41 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/01 14:50:30 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void	*status_monitor(void *philos)
 	{
 		if (philo->meals == philo->data->opt_eat)
 		{
-			pthread_mutex_lock(philo->data->meals);
+			pthread_mutex_lock(&philo->data->meals);
 			philo->data->philos_full++;
-			pthread_mutex_unlock(philo->data->meals);
+			pthread_mutex_unlock(&philo->data->meals);
 		}
 		if (philo->data->philos_full == philo->data->opt_eat)
 		{
@@ -32,10 +32,12 @@ void	*status_monitor(void *philos)
 	}
 	philo->data->end = 1;
 	message(philo, philo->data->start_time, philo->spot, "died");
+	pthread_mutex_lock(&philo->data->write);
 	/*Lock forks and exit?*/
+	return (0);
 }
 
-void	think(t_philo *philo)
+void	think(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 {
 	message(philo, philo->data->start_time, philo->spot, "is thinking");
 	pthread_mutex_lock(fork1);
@@ -75,14 +77,14 @@ void	*simulation(void *philos)
 		fork2 = philo->data->forks[philo->data->n - 1];
 	else
 		fork2 = philo->data->forks[philo->spot - 2];
-	philo->last_meal = get_time() - philo->data->start_time;
+	/*Fix data race with another mutex or just initialize before simultaion*/
+	//philo->last_meal = get_time() - philo->data->start_time;
 	/*CHECK IF THIS IS ALLOWED!!!*/
 	if (!(philo->spot % 2))
 		usleep(philo->data->ttsleep * 1000);
-	/*SHOULD THE PHILO KEEP IN LOOP UNTIL ALL OTHERS HAVE EATEN THE REQUIRED AMOUNT OF TIMES OR JUST STOP????*/
-	while (philo->meals < philo->data->opt_eat)
+	while (!philo->data->end)
 	{
-		think(philo);
+		think(philo, fork1, fork2);
 		eat(philo, fork1, fork2);
 		shleep(philo);
 	}

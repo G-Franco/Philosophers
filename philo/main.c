@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/04/30 18:37:54 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/01 10:35:29 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,12 @@ int	prep_data(t_data *data)
 			return (3);
 		data->philo[i]->meals = 0;
 		data->philo[i]->spot = i + 1;
-		data->philo[i]->dead = 0;
 		data->philo[i]->data = data;
 	}
+	data->end = 0;
+	data->philos_full = 0;
 	pthread_mutex_init(data->write, 0);
+	pthread_mutex_init(data->meals, 0);
 	return (0);
 }
 
@@ -73,12 +75,13 @@ int	start(t_data *data)
 		if (pthread_create(&data->philo[i]->id, 0, simulation, data->philo[i])
 			|| pthread_create(&data->philo[i]->status, 0, status_monitor, data->philo[i]))
 			return (1);
-		//pthread_join(data->philo[i]->id, 0);
 	}
-	/*CHECK WHICH IS BETTER*/
 	i = -1;
 	while (++i < data->n)
+	{
 		pthread_join(data->philo[i]->id, 0);
+		pthread_join(data->philo[i]->status, 0);
+	}
 	return (0);
 }
 

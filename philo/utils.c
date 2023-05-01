@@ -6,17 +6,18 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/04/30 18:36:49 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/01 10:37:12 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	message(t_philo philo, unsigned long start_time, int n, char *msg)
+void	message(t_philo *philo, unsigned long start_time, int n, char *msg)
 {
 	pthread_mutex_lock(philo->data->write);
 	printf("%lu %i %s\n", get_time() - start_time, n, msg);
-	pthread_mutex_unlock(philo->data->write);
+	if (!philo->data->end)
+		pthread_mutex_unlock(philo->data->write);
 	return ;
 }
 

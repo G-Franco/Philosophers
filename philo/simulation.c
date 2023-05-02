@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/02 11:45:40 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/02 13:24:32 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,12 @@ void	*status(void *philos)
 	return (0);
 }
 
-void	think(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
+void	eat(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 {
-	message(philo, philo->spot, "is thinking", 1);
 	pthread_mutex_lock(fork1);
 	message(philo, philo->spot, "has taken a fork", 1);
 	pthread_mutex_lock(fork2);
 	message(philo, philo->spot, "has taken a fork", 1);
-	return ;
-}
-
-void	eat(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
-{
 	message(philo, philo->spot, "is eating", 1);
 	pthread_mutex_lock(&philo->data->meals);
 	philo->last_meal = get_time() - philo->data->start_time;
@@ -86,13 +80,17 @@ void	*simulation(void *philos)
 		fork2 = philo->data->forks[philo->data->n - 1];
 	else
 		fork2 = philo->data->forks[philo->spot - 2];
-	/*CHECK IF THIS IS ALLOWED!!!*/
-	if (!(philo->spot % 2))
+	while (get_time() < philo->data->start_time)
+		continue ;
+	pthread_mutex_lock(&philo->data->meals);
+	philo->last_meal = get_time() - philo->data->start_time;
+	pthread_mutex_unlock(&philo->data->meals);
+	if (philo->id % 2)
 		usleep(philo->data->ttsleep * 1000);
 	/*Should philos keep eating after reaching max meals?*/
-	while (!philo->data->end)
+	while (!end(philo))
 	{
-		think(philo, fork1, fork2);
+		message(philo, philo->spot, "is thinking", 1);
 		eat(philo, fork1, fork2);
 		message(philo, philo->spot, "is sleeping", 1);
 		usleep(philo->data->ttsleep * 1000);

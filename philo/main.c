@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/02 11:43:46 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/02 12:57:43 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,18 +73,14 @@ int	start(t_data *data)
 	int	i;
 
 	i = -1;
-	data->start_time = get_time();
+	data->start_time = get_time() + (data->n * 20);
 	while (++i < data->n)
 	{
-		data->philo[i]->last_meal = get_time() - data->start_time;
 		if (pthread_create(&data->philo[i]->id, 0, simulation, data->philo[i]))
 			return (1);
-		if (data->n > 1)
-		{
-			if (pthread_create(&data->philo[i]->status, 0, status,
-					data->philo[i]))
-				return (1);
-		}
+		if (data->n > 1 && pthread_create(&data->philo[i]->status,
+				0, status, data->philo[i]))
+			return (1);
 	}
 	i = -1;
 	while (++i < data->n)

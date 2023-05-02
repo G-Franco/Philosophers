@@ -25,6 +25,7 @@ typedef struct s_philo
 {
 	pthread_t			id;
 	pthread_t			status;
+	pthread_mutex_t		last_meal_m;
 	unsigned long		last_meal;
 	struct s_data		*data;
 	int					meals;
@@ -56,7 +57,7 @@ int				start(t_data *data);
 
 /*simulation.c*/
 void			*status(void *philo);
-void			eat(t_philo *philo, pthread_mutex_t *fork1,
+void			life(t_philo *philo, pthread_mutex_t *fork1,
 					pthread_mutex_t *fork2);
 void			*single(t_philo *philo, pthread_mutex_t *fork1);
 void			*simulation(void *philo);
@@ -69,6 +70,7 @@ int				free_data(t_data *data);
 unsigned long	get_time(void);
 
 /*utils2*/
-int				end(t_philo *philo);
+int				end_check(t_philo *philo);
+void			end(t_philo *philo);
 
 #endif

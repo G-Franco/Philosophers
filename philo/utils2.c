@@ -12,11 +12,19 @@
 
 #include "philo.h"
 
-int	end(t_philo *philo)
+int	end_check(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->end_m);
 	if (philo->data->end)
 		return (1);
 	pthread_mutex_unlock(&philo->data->end_m);
 	return (0);
+}
+
+void	end(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->end_m);
+	philo->data->end = 1;
+	pthread_mutex_unlock(&philo->data->end_m);
+	return ;
 }

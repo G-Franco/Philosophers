@@ -53,6 +53,8 @@ int	prep_data(t_data *data)
 	{
 		if (pthread_mutex_init(data->forks[i], 0))
 			return (1);
+		if (pthread_mutex_init(&data->philo[i]->last_meal_m, 0))
+			return (2);
 		data->philo[i]->meals = 0;
 		data->philo[i]->spot = i + 1;
 		data->philo[i]->data = data;
@@ -60,11 +62,11 @@ int	prep_data(t_data *data)
 	data->end = 0;
 	data->philos_full = 0;
 	if (pthread_mutex_init(&data->write, 0))
-		return (2);
-	if (pthread_mutex_init(&data->meals, 0))
 		return (3);
-	if (pthread_mutex_init(&data->end_m, 0))
+	if (pthread_mutex_init(&data->meals, 0))
 		return (4);
+	if (pthread_mutex_init(&data->end_m, 0))
+		return (5);
 	return (0);
 }
 

@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
+/*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/01 14:49:12 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/02 10:24:22 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	message(t_philo *philo, unsigned long start_time, int n, char *msg)
+void	message(t_philo *philo, int n, char *msg, int flag)
 {
 	pthread_mutex_lock(&philo->data->write);
-	printf("%lu %i %s\n", get_time() - start_time, n, msg);
-	pthread_mutex_unlock(&philo->data->write);
+	printf("%lu %i %s\n", get_time() - philo->data->start_time, n, msg);
+	if (flag)
+		pthread_mutex_unlock(&philo->data->write);
 	return ;
 }
 

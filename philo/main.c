@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
+/*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/01 14:40:37 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/02 11:43:46 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,19 @@ int	prep_data(t_data *data)
 	while (++i < data->n)
 	{
 		if (pthread_mutex_init(data->forks[i], 0))
-			return (3);
+			return (1);
 		data->philo[i]->meals = 0;
 		data->philo[i]->spot = i + 1;
 		data->philo[i]->data = data;
 	}
 	data->end = 0;
 	data->philos_full = 0;
-	pthread_mutex_init(&data->write, 0);
-	pthread_mutex_init(&data->meals, 0);
+	if (pthread_mutex_init(&data->write, 0))
+		return (2);
+	if (pthread_mutex_init(&data->meals, 0))
+		return (3);
+	if (pthread_mutex_init(&data->end_m, 0))
+		return (4);
 	return (0);
 }
 
@@ -73,15 +77,21 @@ int	start(t_data *data)
 	while (++i < data->n)
 	{
 		data->philo[i]->last_meal = get_time() - data->start_time;
-		if (pthread_create(&data->philo[i]->id, 0, simulation, data->philo[i])
-			|| pthread_create(&data->philo[i]->status, 0, status_monitor, data->philo[i]))
+		if (pthread_create(&data->philo[i]->id, 0, simulation, data->philo[i]))
 			return (1);
+		if (data->n > 1)
+		{
+			if (pthread_create(&data->philo[i]->status, 0, status,
+					data->philo[i]))
+				return (1);
+		}
 	}
 	i = -1;
 	while (++i < data->n)
 	{
 		pthread_join(data->philo[i]->id, 0);
-		pthread_join(data->philo[i]->status, 0);
+		if (data->n > 1)
+			pthread_join(data->philo[i]->status, 0);
 	}
 	return (0);
 }

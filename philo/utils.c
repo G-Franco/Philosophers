@@ -12,12 +12,16 @@
 
 #include "philo.h"
 
-void	message(t_philo *philo, int n, char *msg, int flag)
+void	message(t_philo *philo, int n, char *msg)
 {
 	pthread_mutex_lock(&philo->data->write);
-	printf("%lu %i %s\n", get_time() - philo->data->start_time, n, msg);
-	if (flag)
+	if (end_check(philo))
+	{
 		pthread_mutex_unlock(&philo->data->write);
+		return ;
+	}
+	printf("%lu %i %s\n", get_time() - philo->data->start_time, n, msg);
+	pthread_mutex_unlock(&philo->data->write);
 	return ;
 }
 
@@ -80,11 +84,11 @@ int	free_data(t_data *data)
 	return (1);
 }
 
-unsigned long	get_time(void)
+time_t	get_time(void)
 {
 	struct timeval	time;
 
 	gettimeofday(&time, 0);
-	return (time.tv_sec * (unsigned long)1000
-		+ (time.tv_usec / (unsigned long)1000));
+	return (time.tv_sec * 1000
+		+ (time.tv_usec / 1000));
 }

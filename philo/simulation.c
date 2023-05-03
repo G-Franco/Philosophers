@@ -25,14 +25,16 @@ void	*status(void *philos)
 		if (get_time() - philo->data->start_time - philo->last_meal >= philo->data->ttdie)
 		{
 			end(philo);
-			message(philo, philo->spot, "died", 0);
+			message(philo, philo->spot, "died", 1);
 			pthread_mutex_unlock(&philo->last_meal_m);
 			return (0);
 		}
 		pthread_mutex_unlock(&philo->last_meal_m);
 		pthread_mutex_lock(&philo->data->meals);
+		pthread_mutex_lock(&philo->meals_m);
 		if (philo->meals == philo->data->opt_eat)
 			philo->data->philos_full++;
+		pthread_mutex_unlock(&philo->meals_m);
 		if (philo->data->philos_full == philo->data->opt_eat)
 		{
 			end(philo);
@@ -53,7 +55,6 @@ void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 	message(philo, philo->spot, "has taken a fork", 1);
 	if (!end_check(philo))
 		message(philo, philo->spot, "is eating", 1);
-	/*MAKE SURE THIS DOES NOT BREAK STUFF*/
 	else
 	{
 		pthread_mutex_unlock(fork1);
@@ -66,7 +67,9 @@ void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 	usleep(philo->data->tteat * 1000);
 	pthread_mutex_unlock(fork1);
 	pthread_mutex_unlock(fork2);
+	pthread_mutex_lock(&philo->meals_m);
 	philo->meals++;
+	pthread_mutex_unlock(&philo->meals_m);
 	message(philo, philo->spot, "is sleeping", 1);
 	usleep(philo->data->ttsleep * 1000);
 	return ;
@@ -101,9 +104,8 @@ void	*simulation(void *philos)
 	pthread_mutex_lock(&philo->last_meal_m);
 	philo->last_meal = get_time() - philo->data->start_time;
 	pthread_mutex_unlock(&philo->last_meal_m);
-	if (philo->id % 2)
-		usleep(philo->data->ttsleep * 1000);
-	/*Should philos keep eating after reaching max meals?*/
+	if (!(philo->spot % 2))
+		usleep(10000);
 	while (!end_check(philo))
 		life(philo, fork1, fork2);
 	return (0);

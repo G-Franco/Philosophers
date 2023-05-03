@@ -26,6 +26,7 @@ typedef struct s_philo
 	pthread_t			id;
 	pthread_t			status;
 	pthread_mutex_t		last_meal_m;
+	pthread_mutex_t		meals_m;
 	unsigned long		last_meal;
 	struct s_data		*data;
 	int					meals;

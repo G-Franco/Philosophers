@@ -20,7 +20,7 @@ void	message(t_philo *philo, int n, char *msg)
 		pthread_mutex_unlock(&philo->data->write);
 		return ;
 	}
-	printf("%lu %i %s\n", get_time() - philo->data->start_time, n, msg);
+	printf("%lu %i %s\n", get_time() - philo->data->start_time, n + 1, msg);
 	pthread_mutex_unlock(&philo->data->write);
 	return ;
 }

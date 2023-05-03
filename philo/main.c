@@ -58,7 +58,7 @@ int	prep_data(t_data *data)
 		if (pthread_mutex_init(&data->philo[i]->meals_m, 0))
 			return (3);
 		data->philo[i]->meals = 0;
-		data->philo[i]->spot = i + 1;
+		data->philo[i]->spot = i;
 		data->philo[i]->data = data;
 	}
 	data->end = 0;

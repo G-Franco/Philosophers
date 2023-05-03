@@ -60,7 +60,7 @@ void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 	shleep(philo, philo->data->tteat);
 	pthread_mutex_unlock(fork1);
 	pthread_mutex_unlock(fork2);
-	if (end_check(philo))
+	if (!end_check(philo))
 	{
 		pthread_mutex_lock(&philo->meals_m);
 		philo->meals++;
@@ -88,11 +88,16 @@ void	*simulation(void *philos)
 	pthread_mutex_t	*fork2;
 
 	philo = (t_philo *)philos;
-	fork1 = philo->data->forks[philo->spot - 1];
-	if (philo->spot == 1)
-		fork2 = philo->data->forks[philo->data->n - 1];
+	if (!(philo->spot % 2))
+	{
+		fork1 = philo->data->forks[philo->spot];
+		fork2 = philo->data->forks[(philo->spot + 1) % philo->data->n];
+	}
 	else
-		fork2 = philo->data->forks[philo->spot - 2];
+	{
+		fork1 = philo->data->forks[(philo->spot + 1) % philo->data->n];
+		fork2 = philo->data->forks[philo->spot];
+	}
 	while (get_time() < philo->data->start_time)
 		continue ;
 	if (philo->data->n == 1)
@@ -100,7 +105,7 @@ void	*simulation(void *philos)
 	pthread_mutex_lock(&philo->last_meal_m);
 	philo->last_meal = get_time() - philo->data->start_time;
 	pthread_mutex_unlock(&philo->last_meal_m);
-	if (!(philo->spot % 2))
+	if (philo->spot % 2)
 		usleep(1000);
 	while (!end_check(philo))
 		life(philo, fork1, fork2);

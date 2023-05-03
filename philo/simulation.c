@@ -60,7 +60,6 @@ void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 	shleep(philo, philo->data->tteat);
 	pthread_mutex_unlock(fork1);
 	pthread_mutex_unlock(fork2);
-	message(philo, philo->spot, "released forks");
 	if (end_check(philo))
 	{
 		pthread_mutex_lock(&philo->meals_m);

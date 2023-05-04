@@ -6,16 +6,16 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/02 10:24:22 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/04 09:42:43 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	message(t_philo *philo, int n, char *msg)
+void	message(t_philo *philo, int n, char *msg, int end)
 {
 	pthread_mutex_lock(&philo->data->write);
-	if (end_check(philo))
+	if (!end && end_check(philo))
 	{
 		pthread_mutex_unlock(&philo->data->write);
 		return ;

@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/02 13:24:32 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/04 09:47:21 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,8 @@ void	*status(void *philos)
 		continue ;
 	while (1)
 	{
-		pthread_mutex_lock(&philo->last_meal_m);
-		if (get_time() - philo->data->start_time - philo->last_meal >= philo->data->ttdie)
-		{
-			end(philo);
-			message(philo, philo->spot, "died");
-			pthread_mutex_unlock(&philo->last_meal_m);
+		if (dead(philo))
 			return (0);
-		}
-		pthread_mutex_unlock(&philo->last_meal_m);
 		pthread_mutex_lock(&philo->data->meals);
 		pthread_mutex_lock(&philo->meals_m);
 		if (philo->meals == philo->data->opt_eat)
@@ -48,12 +41,12 @@ void	*status(void *philos)
 
 void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 {
-	message(philo, philo->spot, "is thinking");
+	message(philo, philo->spot, "is thinking", 0);
 	pthread_mutex_lock(fork1);
-	message(philo, philo->spot, "has taken a fork");
+	message(philo, philo->spot, "has taken a fork", 0);
 	pthread_mutex_lock(fork2);
-	message(philo, philo->spot, "has taken a fork");
-	message(philo, philo->spot, "is eating");
+	message(philo, philo->spot, "has taken a fork", 0);
+	message(philo, philo->spot, "is eating", 0);
 	pthread_mutex_lock(&philo->last_meal_m);
 	philo->last_meal = get_time() - philo->data->start_time;
 	pthread_mutex_unlock(&philo->last_meal_m);
@@ -64,9 +57,10 @@ void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 	{
 		pthread_mutex_lock(&philo->meals_m);
 		philo->meals++;
+		//printf("PHILO %i MEALS: %i\n", philo->spot + 1, philo->meals);
 		pthread_mutex_unlock(&philo->meals_m);
 	}
-	message(philo, philo->spot, "is sleeping");
+	message(philo, philo->spot, "is sleeping", 0);
 	shleep(philo, philo->data->ttsleep);
 	return ;
 }
@@ -74,9 +68,9 @@ void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 void	*single(t_philo *philo, pthread_mutex_t *fork1)
 {
 	pthread_mutex_lock(fork1);
-	message(philo, philo->spot, "has taken a fork");
-	usleep(philo->data->ttdie);
-	message(philo, philo->spot, "died");
+	message(philo, philo->spot, "has taken a fork", 0);
+	usleep(philo->data->ttdie * 1000);
+	message(philo, philo->spot, "died", 0);
 	pthread_mutex_unlock(fork1);
 	return (0);
 }

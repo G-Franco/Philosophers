@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:57:11 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/02 13:24:42 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/04 09:34:22 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	*single(t_philo *philo, pthread_mutex_t *fork1);
 void	*simulation(void *philo);
 
 /*utils.c*/
-void	message(t_philo *philo, int n, char *msg);
+void	message(t_philo *philo, int n, char *msg, int end);
 int		check_int(int ac, char **av);
 int		ft_atoi(char *str);
 int		free_data(t_data *data);
@@ -73,6 +73,7 @@ time_t	get_time(void);
 /*utils2*/
 int		end_check(t_philo *philo);
 void	end(t_philo *philo);
+int		dead(t_philo *philo);
 void	shleep(t_philo *philo, time_t time);
 
 #endif

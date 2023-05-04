@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_2.c                                          :+:      :+:    :+:   */
+/*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:16:32 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/02 13:19:19 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/04 09:32:42 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,21 @@ void	end(t_philo *philo)
 	philo->data->end = 1;
 	pthread_mutex_unlock(&philo->data->end_m);
 	return ;
+}
+
+int	dead(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->last_meal_m);
+	if (get_time() - philo->data->start_time - philo->last_meal
+		>= philo->data->ttdie)
+	{
+		end(philo);
+		message(philo, philo->spot, "died", 1);
+		pthread_mutex_unlock(&philo->last_meal_m);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->last_meal_m);
+	return (0);
 }
 
 void	shleep(t_philo *philo, time_t time)

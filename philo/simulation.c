@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/04 10:19:20 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/04 10:46:44 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,21 @@ void	*status(void *philos)
 	{
 		if (dead(philo))
 			return (0);
-		pthread_mutex_lock(&philo->data->meals);
-		pthread_mutex_lock(&philo->meals_m);
-		if (philo->meals == philo->data->opt_eat)
-			philo->data->philos_full++;
-		pthread_mutex_unlock(&philo->meals_m);
-		if (philo->data->philos_full == philo->data->n)
+		if (philo->data->opt_eat)
 		{
-			end(philo);
+			pthread_mutex_lock(&philo->data->meals);
+			pthread_mutex_lock(&philo->meals_m);
+			if (philo->meals == philo->data->opt_eat)
+				philo->data->philos_full++;
+			pthread_mutex_unlock(&philo->meals_m);
+			if (philo->data->philos_full == philo->data->n)
+			{
+				end(philo);
+				pthread_mutex_unlock(&philo->data->meals);
+				return (0);
+			}
 			pthread_mutex_unlock(&philo->data->meals);
-			return (0);
 		}
-		pthread_mutex_unlock(&philo->data->meals);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:57:11 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/04 11:53:16 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/04 15:14:31 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,6 @@ struct	s_data;
 typedef struct s_philo
 {
 	pthread_t			id;
-	pthread_t			status;
-	pthread_mutex_t		last_meal_m;
-	pthread_mutex_t		meals_m;
 	struct s_data		*data;
 	time_t				last_meal;
 	int					meals;
@@ -40,6 +37,9 @@ typedef struct s_data
 	pthread_mutex_t	write;
 	pthread_mutex_t	meals;
 	pthread_mutex_t	end_m;
+	pthread_mutex_t	last_meal_m;
+	pthread_mutex_t	meals_m;
+	pthread_t		status;
 	time_t			ttdie;
 	time_t			tteat;
 	time_t			ttsleep;
@@ -58,7 +58,7 @@ int				start(t_data *data);
 
 /*simulation.c*/
 void			message(t_philo *philo, int n, char *msg, int end);
-void			*status(void *philo);
+int				status(t_data *data);
 void			life(t_philo *philo, pthread_mutex_t *fork1,
 					pthread_mutex_t *fork2);
 void			*single(t_philo *philo, pthread_mutex_t *fork1);

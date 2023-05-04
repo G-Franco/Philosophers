@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:16:32 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/04 09:32:42 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/04 10:18:45 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@ int	end_check(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->end_m);
 	if (philo->data->end)
+	{
+		pthread_mutex_unlock(&philo->data->end_m);
 		return (1);
+	}
 	pthread_mutex_unlock(&philo->data->end_m);
 	return (0);
 }

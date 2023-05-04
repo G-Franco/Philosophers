@@ -6,11 +6,24 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/04 10:46:44 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/04 11:53:51 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	message(t_philo *philo, int n, char *msg, int end)
+{
+	pthread_mutex_lock(&philo->data->write);
+	if (!end && end_check(philo))
+	{
+		pthread_mutex_unlock(&philo->data->write);
+		return ;
+	}
+	printf("%lu %i %s\n", get_time() - philo->data->start_time, n + 1, msg);
+	pthread_mutex_unlock(&philo->data->write);
+	return ;
+}
 
 void	*status(void *philos)
 {
@@ -21,23 +34,8 @@ void	*status(void *philos)
 		continue ;
 	while (1)
 	{
-		if (dead(philo))
+		if (dead(philo) || meal_checker(philo))
 			return (0);
-		if (philo->data->opt_eat)
-		{
-			pthread_mutex_lock(&philo->data->meals);
-			pthread_mutex_lock(&philo->meals_m);
-			if (philo->meals == philo->data->opt_eat)
-				philo->data->philos_full++;
-			pthread_mutex_unlock(&philo->meals_m);
-			if (philo->data->philos_full == philo->data->n)
-			{
-				end(philo);
-				pthread_mutex_unlock(&philo->data->meals);
-				return (0);
-			}
-			pthread_mutex_unlock(&philo->data->meals);
-		}
 	}
 	return (0);
 }
@@ -84,16 +82,8 @@ void	*simulation(void *philos)
 	pthread_mutex_t	*fork2;
 
 	philo = (t_philo *)philos;
-	if (!(philo->spot % 2))
-	{
-		fork1 = philo->data->forks[philo->spot];
-		fork2 = philo->data->forks[(philo->spot + 1) % philo->data->n];
-	}
-	else
-	{
-		fork1 = philo->data->forks[(philo->spot + 1) % philo->data->n];
-		fork2 = philo->data->forks[philo->spot];
-	}
+	fork1 = forks(philo, 1);
+	fork2 = forks(philo, 2);
 	while (get_time() < philo->data->start_time)
 		continue ;
 	if (philo->data->n == 1)

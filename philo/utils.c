@@ -6,24 +6,11 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/04 10:18:54 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/04 11:52:16 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	message(t_philo *philo, int n, char *msg, int end)
-{
-	pthread_mutex_lock(&philo->data->write);
-	if (!end && end_check(philo))
-	{
-		pthread_mutex_unlock(&philo->data->write);
-		return ;
-	}
-	printf("%lu %i %s\n", get_time() - philo->data->start_time, n + 1, msg);
-	pthread_mutex_unlock(&philo->data->write);
-	return ;
-}
 
 int	check_int(int ac, char **av)
 {
@@ -91,4 +78,22 @@ time_t	get_time(void)
 	gettimeofday(&time, 0);
 	return (time.tv_sec * 1000
 		+ (time.tv_usec / 1000));
+}
+
+pthread_mutex_t	*forks(t_philo *philo, int fork_n)
+{
+	if (fork_n == 1)
+	{
+		if (!(philo->spot % 2))
+			return (philo->data->forks[philo->spot]);
+		else
+			return (philo->data->forks[(philo->spot + 1) % philo->data->n]);
+	}
+	else
+	{
+		if (!(philo->spot % 2))
+			return (philo->data->forks[(philo->spot + 1) % philo->data->n]);
+		else
+			return (philo->data->forks[philo->spot]);
+	}
 }

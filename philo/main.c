@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/02 12:57:43 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/04 11:09:46 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	write_usage(void)
 int	usage(int ac, char **av, t_data *data)
 {
 	if (check_int(ac, av))
-		return (1);
+		return (write_usage());
 	if (ac < 5 || ac > 6 || !av[1] || !av[2] || !av[3] || !av[4])
 		return (write_usage());
 	data->n = ft_atoi(av[1]);

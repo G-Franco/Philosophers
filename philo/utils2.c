@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:16:32 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/04 10:18:45 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/04 11:42:13 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,26 @@ int	dead(t_philo *philo)
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->last_meal_m);
+	return (0);
+}
+
+int	meal_checker(t_philo *philo)
+{
+	if (philo->data->opt_eat)
+	{
+		pthread_mutex_lock(&philo->data->meals);
+		pthread_mutex_lock(&philo->meals_m);
+		if (philo->meals == philo->data->opt_eat)
+			philo->data->philos_full++;
+		pthread_mutex_unlock(&philo->meals_m);
+		if (philo->data->philos_full == philo->data->n)
+		{
+			end(philo);
+			pthread_mutex_unlock(&philo->data->meals);
+			return (1);
+		}
+		pthread_mutex_unlock(&philo->data->meals);
+	}
 	return (0);
 }
 

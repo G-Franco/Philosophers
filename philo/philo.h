@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:57:11 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/04 09:34:22 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/04 11:53:16 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,29 +51,31 @@ typedef struct s_data
 }					t_data;
 
 /*main.c*/
-int		write_usage(void);
-int		usage(int ac, char **av, t_data *data);
-int		prep_data(t_data *data);
-int		start(t_data *data);
+int				write_usage(void);
+int				usage(int ac, char **av, t_data *data);
+int				prep_data(t_data *data);
+int				start(t_data *data);
 
 /*simulation.c*/
-void	*status(void *philo);
-void	life(t_philo *philo, pthread_mutex_t *fork1,
-			pthread_mutex_t *fork2);
-void	*single(t_philo *philo, pthread_mutex_t *fork1);
-void	*simulation(void *philo);
+void			message(t_philo *philo, int n, char *msg, int end);
+void			*status(void *philo);
+void			life(t_philo *philo, pthread_mutex_t *fork1,
+					pthread_mutex_t *fork2);
+void			*single(t_philo *philo, pthread_mutex_t *fork1);
+void			*simulation(void *philo);
 
 /*utils.c*/
-void	message(t_philo *philo, int n, char *msg, int end);
-int		check_int(int ac, char **av);
-int		ft_atoi(char *str);
-int		free_data(t_data *data);
-time_t	get_time(void);
+int				check_int(int ac, char **av);
+int				ft_atoi(char *str);
+int				free_data(t_data *data);
+time_t			get_time(void);
+pthread_mutex_t	*forks(t_philo *philo, int fork_n);
 
 /*utils2*/
-int		end_check(t_philo *philo);
-void	end(t_philo *philo);
-int		dead(t_philo *philo);
-void	shleep(t_philo *philo, time_t time);
+int				end_check(t_philo *philo);
+void			end(t_philo *philo);
+int				dead(t_philo *philo);
+int				meal_checker(t_philo *philo);
+void			shleep(t_philo *philo, time_t time);
 
 #endif

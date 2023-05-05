@@ -6,20 +6,11 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/02 10:24:22 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/04 15:33:19 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	message(t_philo *philo, int n, char *msg, int flag)
-{
-	pthread_mutex_lock(&philo->data->write);
-	printf("%lu %i %s\n", get_time() - philo->data->start_time, n, msg);
-	if (flag)
-		pthread_mutex_unlock(&philo->data->write);
-	return ;
-}
 
 int	check_int(int ac, char **av)
 {
@@ -75,16 +66,57 @@ int	free_data(t_data *data)
 		free(data->forks[i]);
 		free(data->philo[i]);
 	}
+	pthread_mutex_destroy(&data->last_meal_m);
+	pthread_mutex_destroy(&data->meals_m);
+	pthread_mutex_destroy(&data->write);
+	pthread_mutex_destroy(&data->meals);
+	pthread_mutex_destroy(&data->end_m);
 	free(data->philo);
 	free(data->forks);
 	return (1);
 }
 
-unsigned long	get_time(void)
+time_t	get_time(void)
 {
 	struct timeval	time;
 
 	gettimeofday(&time, 0);
-	return (time.tv_sec * (unsigned long)1000
-		+ (time.tv_usec / (unsigned long)1000));
+	return (time.tv_sec * 1000
+		+ (time.tv_usec / 1000));
+}
+
+/* pthread_mutex_t	*forks(t_philo *philo, int fork_n)
+{
+	if (fork_n == 1)
+	{
+		if (philo->spot % 2)
+			return (philo->data->forks[philo->spot]);
+		else
+			return (philo->data->forks[(philo->spot + 1) % philo->data->n]);
+	}
+	else
+	{
+		if (philo->spot % 2)
+			return (philo->data->forks[(philo->spot + 1) % philo->data->n]);
+		else
+			return (philo->data->forks[philo->spot]);
+	}
+} */
+
+pthread_mutex_t	*forks(t_philo *philo, int fork_n)
+{
+	if (fork_n == 1)
+	{
+		if (philo->spot == 0)
+			return (philo->data->forks[philo->spot]);
+		else
+			return (philo->data->forks[philo->spot - 1]);
+	}
+	else
+	{
+		if (philo->spot == 0)
+			return (philo->data->forks[philo->data->n - 1]);
+		else
+			return (philo->data->forks[philo->spot]);
+	}
 }

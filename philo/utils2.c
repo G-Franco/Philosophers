@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:16:32 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/05 14:10:21 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/05 14:56:20 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,12 @@ int	meal_checker(t_philo *philo)
 	return (0);
 }
 
-void	shleep(t_philo *philo, time_t time)
+void	shleep(time_t time)
 {
 	time_t	wait;
 
 	wait = get_time() + time;
 	while (get_time() < wait)
-	{
-		if (end_check(philo))
-			return ;
-		//REMOVE?? usleep(100);
-	}
+		/*CHANGE AND CHECK*/usleep(10);
 	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/05 14:09:09 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/05 14:46:33 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	status(t_data *data)
 			if (dead(data_n->philo[i]) || meal_checker(data_n->philo[i]))
 				return (0);
 		}
-		usleep(1000);
+		usleep(500);
 	}
 	return (0);
 }
@@ -81,7 +81,7 @@ static void	think(t_philo *philo)
 	if (time_to_think > 600)
 		time_to_think = 200;
 	message(philo, philo->spot, "is thinking", 0);
-	shleep(philo, time_to_think);
+	shleep(time_to_think);
 }
 
 void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
@@ -94,7 +94,7 @@ void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 	pthread_mutex_lock(&philo->last_m);
 	philo->last_meal = get_time() - philo->data->start_time;
 	pthread_mutex_unlock(&philo->last_m);
-	shleep(philo, philo->data->tteat);
+	shleep(philo->data->tteat);
 	pthread_mutex_unlock(fork1);
 	pthread_mutex_unlock(fork2);
 	if (!end_check(philo))
@@ -104,7 +104,7 @@ void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 		pthread_mutex_unlock(&philo->counter_m);
 	}
 	message(philo, philo->spot, "is sleeping", 0);
-	shleep(philo, philo->data->ttsleep);
+	shleep(philo->data->ttsleep);
 	return ;
 }
 

@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/05 14:08:17 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/05 14:34:25 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	start(t_data *data)
 	int	i;
 
 	i = -1;
-	data->start_time = get_time() + (data->n * 20);
+	data->start_time = get_time() + (data->n * 2);
 	while (++i < data->n)
 	{
 		if (pthread_create(&data->philo[i]->id, 0, simulation, data->philo[i]))

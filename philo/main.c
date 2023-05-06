@@ -64,7 +64,7 @@ int	prep_data(t_data *data)
 		data->philo[i]->fork2 = forks(data->philo[i], 2);
 	}
 	data->end = 0;
-	data->philos_full = 0;
+	//data->philos_full = 0;
 	if (pthread_mutex_init(&data->write_m, 0))
 		return (1);
 	if (pthread_mutex_init(&data->end_m, 0))

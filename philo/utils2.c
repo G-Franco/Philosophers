@@ -52,10 +52,10 @@ int	meal_checker(t_philo *philo)
 	if (!philo->data->opt_eat)
 		return (0);
 	pthread_mutex_lock(&philo->counter_m);
-	if (philo->meals == philo->data->opt_eat)
-		philo->data->philos_full++;
+	if (philo->meals < philo->data->opt_eat)
+		philo->data->philos_full = 0;
 	pthread_mutex_unlock(&philo->counter_m);
-	if (philo->data->philos_full == philo->data->n)
+	if (philo->data->philos_full == 1)
 	{
 		end(philo);
 		return (1);

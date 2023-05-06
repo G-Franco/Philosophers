@@ -35,6 +35,7 @@ int	status(t_data *data)
 		continue ;
 	while (1)
 	{
+		data->philos_full = 1;
 		i = -1;
 		while (++i < data_n->n)
 		{

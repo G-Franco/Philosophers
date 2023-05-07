@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/04 15:24:45 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/05 14:34:25 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,26 +53,22 @@ int	prep_data(t_data *data)
 	{
 		if (pthread_mutex_init(data->forks[i], 0))
 			return (1);
-		/* if (pthread_mutex_init(&data->philo[i]->last_meal_m, 0))
-			return (2); */
-		/* if (pthread_mutex_init(&data->philo[i]->meals_m, 0))
-			return (3); */
+		if (pthread_mutex_init(&data->philo[i]->last_m, 0))
+			return (1);
+		if (pthread_mutex_init(&data->philo[i]->counter_m, 0))
+			return (1);
 		data->philo[i]->meals = 0;
 		data->philo[i]->spot = i;
 		data->philo[i]->data = data;
+		data->philo[i]->fork1 = forks(data->philo[i], 1);
+		data->philo[i]->fork2 = forks(data->philo[i], 2);
 	}
 	data->end = 0;
-	data->philos_full = 0;
-	if (pthread_mutex_init(&data->write, 0))
-		return (4);
-	if (pthread_mutex_init(&data->last_meal_m, 0))
-		return (4);
-	if (pthread_mutex_init(&data->meals_m, 0))
-		return (4);
-	if (pthread_mutex_init(&data->meals, 0))
-		return (5);
+	//data->philos_full = 0;
+	if (pthread_mutex_init(&data->write_m, 0))
+		return (1);
 	if (pthread_mutex_init(&data->end_m, 0))
-		return (6);
+		return (1);
 	return (0);
 }
 
@@ -81,24 +77,17 @@ int	start(t_data *data)
 	int	i;
 
 	i = -1;
-	data->start_time = get_time() + (data->n * 20);
+	data->start_time = get_time() + (data->n * 2);
 	while (++i < data->n)
 	{
 		if (pthread_create(&data->philo[i]->id, 0, simulation, data->philo[i]))
 			return (1);
 	}
-	/* if (data->n > 1)
-	{
-		if (pthread_create(&data->status, 0, status, data))
-			return (1);
-	} */
 	if (data->n > 1)
 		status(data);
 	i = -1;
 	while (++i < data->n)
 		pthread_join(data->philo[i]->id, 0);
-	/* if (data->n > 1)
-		pthread_join(data->status, 0); */
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/05 14:09:45 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/08 14:01:10 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,7 @@ time_t	get_time(void)
 	struct timeval	time;
 
 	gettimeofday(&time, 0);
-	return (time.tv_sec * 1000
-		+ (time.tv_usec / 1000));
+	return (time.tv_sec * 1000 + (time.tv_usec / 1000));
 }
 
 pthread_mutex_t	*forks(t_philo *philo, int fork_n)

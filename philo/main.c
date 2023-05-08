@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/08 09:13:17 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/08 14:01:12 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int	prep_data(t_data *data)
 		data->philo[i]->meals = 0;
 		data->philo[i]->spot = i;
 		data->philo[i]->data = data;
-		data->philo[i]->last_meal = 0;
 		data->philo[i]->fork1 = forks(data->philo[i], 1);
 		data->philo[i]->fork2 = forks(data->philo[i], 2);
 	}
@@ -80,6 +79,7 @@ int	start(t_data *data)
 	data->start_time = get_time() + (data->n * 2);
 	while (++i < data->n)
 	{
+		data->philo[i]->last_meal = data->start_time;
 		if (pthread_create(&data->philo[i]->id, 0, simulation, data->philo[i]))
 			return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:16:32 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/05 14:56:20 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:38:02 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,6 @@ void	shleep(time_t time)
 
 	wait = get_time() + time;
 	while (get_time() < wait)
-		/*CHANGE AND CHECK*/usleep(10);
+		continue ;
 	return ;
 }

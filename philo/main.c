@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/05 14:34:25 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:13:17 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,11 @@ int	prep_data(t_data *data)
 		data->philo[i]->meals = 0;
 		data->philo[i]->spot = i;
 		data->philo[i]->data = data;
+		data->philo[i]->last_meal = 0;
 		data->philo[i]->fork1 = forks(data->philo[i], 1);
 		data->philo[i]->fork2 = forks(data->philo[i], 2);
 	}
 	data->end = 0;
-	//data->philos_full = 0;
 	if (pthread_mutex_init(&data->write_m, 0))
 		return (1);
 	if (pthread_mutex_init(&data->end_m, 0))

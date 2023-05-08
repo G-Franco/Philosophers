@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/05 14:46:33 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/08 10:57:33 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,40 +47,19 @@ int	status(t_data *data)
 	return (0);
 }
 
-/* static void	think_routine(t_philo *philo)
-{
-	time_t	time_to_think;
-
-	pthread_mutex_lock(&philo->data->last_m);
-	time_to_think = (philo->data->ttdie
-			- (get_time() - philo->last_meal)
-			- philo->data->tteat) / 2;
-	pthread_mutex_unlock(&philo->data->last_m);
-	if (time_to_think < 0)
-		time_to_think = 0;
-	if (time_to_think == 0)
-		time_to_think = 1;
-	if (time_to_think > 600)
-		time_to_think = 200;
-	message(philo, philo->spot, "is thinking", 0);
-	shleep(philo, time_to_think);
-} */
-
 static void	think(t_philo *philo)
 {
 	time_t	time_to_think;
 
 	pthread_mutex_lock(&philo->last_m);
 	time_to_think = (philo->data->ttdie
-			- (get_time() - philo->last_meal)
+			- (get_time() - philo->data->start_time - philo->last_meal)
 			- philo->data->tteat) / 2;
 	pthread_mutex_unlock(&philo->last_m);
 	if (time_to_think < 0)
 		time_to_think = 0;
-	if (time_to_think == 0)
-		time_to_think = 1;
-	if (time_to_think > 600)
-		time_to_think = 200;
+	if (time_to_think > philo->data->tteat)
+		time_to_think = philo->data->tteat;
 	message(philo, philo->spot, "is thinking", 0);
 	shleep(time_to_think);
 }
@@ -91,10 +70,10 @@ void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 	message(philo, philo->spot, "has taken a fork", 0);
 	pthread_mutex_lock(fork2);
 	message(philo, philo->spot, "has taken a fork", 0);
-	message(philo, philo->spot, "is eating", 0);
 	pthread_mutex_lock(&philo->last_m);
 	philo->last_meal = get_time() - philo->data->start_time;
 	pthread_mutex_unlock(&philo->last_m);
+	message(philo, philo->spot, "is eating", 0);
 	shleep(philo->data->tteat);
 	pthread_mutex_unlock(fork1);
 	pthread_mutex_unlock(fork2);
@@ -128,11 +107,9 @@ void	*simulation(void *philos)
 		continue ;
 	if (philo->data->n == 1)
 		return (single(philo, philo->fork1));
-	pthread_mutex_lock(&philo->last_m);
-	philo->last_meal = get_time() - philo->data->start_time;
-	pthread_mutex_unlock(&philo->last_m);
 	if (philo->spot % 2)
 		think(philo);
+		//usleep(10000);
 	while (!end_check(philo))
 	{
 		life(philo, philo->fork1, philo->fork2);

@@ -6,21 +6,21 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:16:32 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/08 14:02:17 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/08 15:06:44 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	end_check(t_philo *philo)
+int	end_check(t_data *data)
 {
-	pthread_mutex_lock(&philo->data->end_m);
-	if (philo->data->end)
+	pthread_mutex_lock(&data->end_m);
+	if (data->end)
 	{
-		pthread_mutex_unlock(&philo->data->end_m);
+		pthread_mutex_unlock(&data->end_m);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->data->end_m);
+	pthread_mutex_unlock(&data->end_m);
 	return (0);
 }
 
@@ -89,12 +89,18 @@ int	checker(t_data *data)
 	return (0);
 } */
 
-void	shleep(time_t time)
+void	shleep(time_t time, t_philo *philo)
 {
-	time_t	wait;
+	//time_t	wait;
 
-	wait = get_time() + time;
+	(void)philo;
+	usleep(time * 1000);
+	/* wait = get_time() + time;
 	while (get_time() < wait)
-		continue ;
+	{
+		if (end_check(philo->data))
+			break ;
+		usleep(500);
+	} */
 	return ;
 }

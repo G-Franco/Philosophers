@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:57:11 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/08 14:01:13 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/08 14:48:32 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,11 @@ time_t			get_time(void);
 pthread_mutex_t	*forks(t_philo *philo, int fork_n);
 
 /*utils2*/
-int				end_check(t_philo *philo);
+int				end_check(t_data *data);
 void			end(t_data *data);
 int				dead(t_philo *philo);
 int				checker(t_data *data);
 //int				meal_checker(t_philo *philo);
-void			shleep(time_t time);
+void			shleep(time_t time, t_philo *philo);
 
 #endif

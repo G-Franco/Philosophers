@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/08 14:01:11 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/08 15:22:30 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	message(t_philo *philo, int n, char *msg, int end)
 {
 	pthread_mutex_lock(&philo->data->write_m);
-	if (!end && end_check(philo))
+	if (!end && end_check(philo->data))
 	{
 		pthread_mutex_unlock(&philo->data->write_m);
 		return ;
@@ -41,7 +41,7 @@ int	status(t_data *data)
 	return (0);
 }
 
-static void	think(t_philo *philo)
+/* static void	think(t_philo *philo)
 {
 	time_t	time_to_think;
 
@@ -56,7 +56,7 @@ static void	think(t_philo *philo)
 		time_to_think = philo->data->tteat;
 	message(philo, philo->spot, "is thinking", 0);
 	shleep(time_to_think);
-}
+} */
 
 /* static void	think(t_philo *philo)
 {
@@ -74,7 +74,7 @@ static void	think(t_philo *philo)
 	if (time_to_think > 600)
 		time_to_think = 200;
 	message(philo, philo->spot, "is thinking", 0);
-	shleep(time_to_think);
+	shleep(time_to_think, philo);
 } */
 
 void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
@@ -87,17 +87,17 @@ void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(&philo->last_m);
 	message(philo, philo->spot, "is eating", 0);
-	shleep(philo->data->tteat);
+	shleep(philo->data->tteat, philo);
 	pthread_mutex_unlock(fork1);
 	pthread_mutex_unlock(fork2);
-	if (!end_check(philo))
+	if (!end_check(philo->data))
 	{
 		pthread_mutex_lock(&philo->counter_m);
 		philo->meals++;
 		pthread_mutex_unlock(&philo->counter_m);
 	}
 	message(philo, philo->spot, "is sleeping", 0);
-	shleep(philo->data->ttsleep);
+	shleep(philo->data->ttsleep, philo);
 	return ;
 }
 
@@ -121,11 +121,12 @@ void	*simulation(void *philos)
 	if (philo->data->n == 1)
 		return (single(philo, philo->fork1));
 	if (philo->spot % 2)
-		think(philo);
-	while (!end_check(philo))
+		usleep(10000);
+		//think(philo);
+	while (!end_check(philo->data))
 	{
 		life(philo, philo->fork1, philo->fork2);
-		think(philo);
+		//think(philo);
 	}
 	return (0);
 }

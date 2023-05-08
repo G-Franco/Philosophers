@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:57:11 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/08 14:48:32 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/08 16:43:56 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ int				prep_data(t_data *data);
 int				start(t_data *data);
 
 /*simulation.c*/
-void			message(t_philo *philo, int n, char *msg, int end);
 int				status(t_data *data);
+void			think(t_philo *philo);
 void			life(t_philo *philo, pthread_mutex_t *fork1,
 					pthread_mutex_t *fork2);
 void			*single(t_philo *philo, pthread_mutex_t *fork1);
@@ -71,11 +71,10 @@ time_t			get_time(void);
 pthread_mutex_t	*forks(t_philo *philo, int fork_n);
 
 /*utils2*/
+void			message(t_philo *philo, int n, char *msg, int end);
 int				end_check(t_data *data);
 void			end(t_data *data);
 int				dead(t_philo *philo);
 int				checker(t_data *data);
-//int				meal_checker(t_philo *philo);
-void			shleep(time_t time, t_philo *philo);
 
 #endif

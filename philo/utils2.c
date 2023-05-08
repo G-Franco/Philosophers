@@ -6,11 +6,24 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:16:32 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/08 15:06:44 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/08 16:46:11 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	message(t_philo *philo, int n, char *msg, int end)
+{
+	pthread_mutex_lock(&philo->data->write_m);
+	if (!end && end_check(philo->data))
+	{
+		pthread_mutex_unlock(&philo->data->write_m);
+		return ;
+	}
+	printf("%lu %i %s\n", get_time() - philo->data->start_time, n + 1, msg);
+	pthread_mutex_unlock(&philo->data->write_m);
+	return ;
+}
 
 int	end_check(t_data *data)
 {
@@ -71,36 +84,4 @@ int	checker(t_data *data)
 		return (1);
 	}
 	return (0);
-}
-
-/* int	meal_checker(t_philo *philo)
-{
-	if (!philo->data->opt_eat)
-		return (0);
-	pthread_mutex_lock(&philo->counter_m);
-	if (philo->meals < philo->data->opt_eat)
-		philo->data->philos_full = 0;
-	pthread_mutex_unlock(&philo->counter_m);
-	if (philo->data->philos_full == 1)
-	{
-		end(philo);
-		return (1);
-	}
-	return (0);
-} */
-
-void	shleep(time_t time, t_philo *philo)
-{
-	//time_t	wait;
-
-	(void)philo;
-	usleep(time * 1000);
-	/* wait = get_time() + time;
-	while (get_time() < wait)
-	{
-		if (end_check(philo->data))
-			break ;
-		usleep(500);
-	} */
-	return ;
 }

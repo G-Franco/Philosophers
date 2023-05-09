@@ -6,11 +6,11 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/08 14:01:10 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/09 10:51:12 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 int	check_int(int ac, char **av)
 {
@@ -55,23 +55,29 @@ int	ft_atoi(char *str)
 	return (nbr * sig);
 }
 
+void	sem_clean(void)
+{
+	sem_unlink("/forks_s");
+	sem_unlink("/write_s");
+	sem_unlink("/end_s");
+	sem_unlink("/counter_s");
+	sem_unlink("/last_s");
+}
+
 int	free_data(t_data *data)
 {
 	int	i;
 
 	i = -1;
 	while (++i < data->n)
-	{
-		pthread_mutex_destroy(data->forks[i]);
-		pthread_mutex_destroy(&data->philo[i]->last_m);
-		pthread_mutex_destroy(&data->philo[i]->counter_m);
-		free(data->forks[i]);
 		free(data->philo[i]);
-	}
-	pthread_mutex_destroy(&data->write_m);
-	pthread_mutex_destroy(&data->end_m);
 	free(data->philo);
-	free(data->forks);
+	sem_close(data->forks);
+	sem_close(data->write_s);
+	sem_close(data->end_s);
+	sem_close(data->counter_s);
+	sem_close(data->last_s);
+	sem_clean();
 	return (1);
 }
 
@@ -81,22 +87,4 @@ time_t	get_time(void)
 
 	gettimeofday(&time, 0);
 	return (time.tv_sec * 1000 + (time.tv_usec / 1000));
-}
-
-pthread_mutex_t	*forks(t_philo *philo, int fork_n)
-{
-	if (fork_n == 1)
-	{
-		if (philo->spot % 2)
-			return (philo->data->forks[philo->spot]);
-		else
-			return (philo->data->forks[(philo->spot + 1) % philo->data->n]);
-	}
-	else
-	{
-		if (philo->spot % 2)
-			return (philo->data->forks[(philo->spot + 1) % philo->data->n]);
-		else
-			return (philo->data->forks[philo->spot]);
-	}
 }

@@ -6,11 +6,11 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/08 16:44:15 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/09 11:05:38 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 int	write_usage(void)
 {
@@ -51,43 +51,41 @@ int	prep_data(t_data *data)
 	i = -1;
 	while (++i < data->n)
 	{
-		if (pthread_mutex_init(data->forks[i], 0))
-			return (1);
-		if (pthread_mutex_init(&data->philo[i]->last_m, 0))
-			return (1);
-		if (pthread_mutex_init(&data->philo[i]->counter_m, 0))
-			return (1);
 		data->philo[i]->meals = 0;
 		data->philo[i]->spot = i;
 		data->philo[i]->data = data;
-		data->philo[i]->fork1 = forks(data->philo[i], 1);
-		data->philo[i]->fork2 = forks(data->philo[i], 2);
 	}
 	data->end = 0;
-	if (pthread_mutex_init(&data->write_m, 0))
-		return (1);
-	if (pthread_mutex_init(&data->end_m, 0))
+	data->forks = sem_open("/forks_s", O_CREAT, 0644, data->n);
+	data->write_s = sem_open("/write_s", O_CREAT, 0644, 1);
+	data->end_s = sem_open("/end_s", O_CREAT, 0644, 1);
+	data->counter_s = sem_open("/counter_s", O_CREAT, 0644, 1);
+	data->last_s = sem_open("/last_s", O_CREAT, 0644, 1);
+	if (data->forks == SEM_FAILED || data->write_s == SEM_FAILED
+		|| data->end_s == SEM_FAILED || data->counter_s == SEM_FAILED
+		|| data->last_s == SEM_FAILED)
 		return (1);
 	return (0);
 }
 
 int	start(t_data *data)
 {
-	int	i;
+	int		i;
+	pid_t	pid;
 
 	i = -1;
 	data->start_time = get_time() + (data->n * 2);
 	while (++i < data->n)
 	{
 		data->philo[i]->last_meal = data->start_time;
-		if (pthread_create(&data->philo[i]->id, 0, simulation, data->philo[i]))
+		pid = fork();
+		if (pid == -1)
 			return (1);
+		else if (!pid)
+			simulation(data->philo[i]);
 	}
 	if (data->n > 1)
 		status(data);
-	i = -1;
-	while (++i < data->n)
-		pthread_join(data->philo[i]->id, 0);
 	return (0);
 }
 
@@ -100,16 +98,13 @@ int	main(int ac, char **av)
 		return (1);
 	i = -1;
 	data.philo = (t_philo **)malloc(sizeof(t_philo *) * (data.n));
-	data.forks = (pthread_mutex_t **)malloc(sizeof(pthread_mutex_t *)
-			* (data.n));
-	if (!data.philo || !data.forks)
+	if (!data.philo)
 		return (free_data(&data));
 	i = -1;
 	while (++i < data.n)
 	{
 		data.philo[i] = (t_philo *)malloc(sizeof(t_philo));
-		data.forks[i] = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-		if (!data.philo[i] || !data.forks[i])
+		if (!data.philo[i])
 			return (free_data(&data));
 	}
 	if (prep_data(&data))

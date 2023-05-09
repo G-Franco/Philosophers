@@ -6,11 +6,11 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/08 16:43:44 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/09 11:02:02 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 int	status(t_data *data)
 {
@@ -81,7 +81,7 @@ void	*single(t_philo *philo, pthread_mutex_t *fork1)
 	return (0);
 }
 
-void	*simulation(void *philos)
+void	simulation(t_philo *philos)
 {
 	t_philo			*philo;
 
@@ -97,5 +97,5 @@ void	*simulation(void *philos)
 		life(philo, philo->fork1, philo->fork2);
 		think(philo);
 	}
-	return (0);
+	return ;
 }

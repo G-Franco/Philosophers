@@ -6,13 +6,12 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 09:01:03 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/08 14:01:10 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/*Only returns ok if input is composed exclusively of ints*/
 int	check_int(int ac, char **av)
 {
 	int	i;
@@ -31,7 +30,6 @@ int	check_int(int ac, char **av)
 	return (0);
 }
 
-/*Self explanatory*/
 int	ft_atoi(char *str)
 {
 	int	nbr;
@@ -57,7 +55,6 @@ int	ft_atoi(char *str)
 	return (nbr * sig);
 }
 
-/*Frees each allocation and destroys mutexes*/
 int	free_data(t_data *data)
 {
 	int	i;
@@ -78,7 +75,6 @@ int	free_data(t_data *data)
 	return (1);
 }
 
-/*Returns current time converted to milliseconds*/
 time_t	get_time(void)
 {
 	struct timeval	time;
@@ -87,11 +83,6 @@ time_t	get_time(void)
 	return (time.tv_sec * 1000 + (time.tv_usec / 1000));
 }
 
-/*Assigns forks for the current philo.
-Even and odd philos have different priority when choosing left and right forks.
-Odd philos grab their fork first and then the one to their right,
-even philos grab the right one first and then their own.
-This avoids deadlocks.*/
 pthread_mutex_t	*forks(t_philo *philo, int fork_n)
 {
 	if (fork_n == 1)

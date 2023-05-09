@@ -6,13 +6,12 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 09:08:47 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/08 16:43:44 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/*Starts loop to check simulation end conditions*/
 int	status(t_data *data)
 {
 	t_data	*data_n;
@@ -29,9 +28,6 @@ int	status(t_data *data)
 	return (0);
 }
 
-/*To avoid philosophers eating straight away after waking up
-and monopolizing forks, a delay is necessary to make sure
-they start eating at the right time if they can afford it*/
 void	think(t_philo *philo)
 {
 	time_t	time_to_think;
@@ -51,8 +47,6 @@ void	think(t_philo *philo)
 	usleep(time_to_think * 1000);
 }
 
-/*All remaining processes except thinking. Philos take forks, eat and sleep
-while writing status messages and updating their meal count*/
 void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 {
 	pthread_mutex_lock(fork1);
@@ -77,7 +71,6 @@ void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 	return ;
 }
 
-/*If the simulation only has 1 philo he will die after ttdie*/
 void	*single(t_philo *philo, pthread_mutex_t *fork1)
 {
 	pthread_mutex_lock(fork1);
@@ -88,11 +81,6 @@ void	*single(t_philo *philo, pthread_mutex_t *fork1)
 	return (0);
 }
 
-/*Delays start so that everyone is synchronized.
-Ensures that even and odd philos start at different
-points in logic to avoid everyone going for the forks
-at the same time.
-Main loop repeats while checking for the end of simulation flag*/
 void	*simulation(void *philos)
 {
 	t_philo			*philo;

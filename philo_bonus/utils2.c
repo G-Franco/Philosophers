@@ -6,16 +6,12 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:16:32 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 09:08:11 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/08 16:46:11 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/*Checks if the simulation has finished and writes message for current philo.
-if the end flag is 1 or end_check is true no message is written.
-end flag is only passed when the message is for a dead philo so that
-the end_checker is not executed unnecessarily*/
 void	message(t_philo *philo, int n, char *msg, int end)
 {
 	pthread_mutex_lock(&philo->data->write_m);
@@ -29,7 +25,6 @@ void	message(t_philo *philo, int n, char *msg, int end)
 	return ;
 }
 
-/*Checks if simulation has finished*/
 int	end_check(t_data *data)
 {
 	pthread_mutex_lock(&data->end_m);
@@ -42,7 +37,6 @@ int	end_check(t_data *data)
 	return (0);
 }
 
-/*Sets flag to stop simulation*/
 void	end(t_data *data)
 {
 	pthread_mutex_lock(&data->end_m);
@@ -51,8 +45,6 @@ void	end(t_data *data)
 	return ;
 }
 
-/*Calculates time since last meal, if it's more than ttdie
-the death message is written and the simulation is set to finished*/
 int	dead(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->last_m);
@@ -68,9 +60,6 @@ int	dead(t_philo *philo)
 	return (0);
 }
 
-/*Runs the death checker forevery philo and
-if there is a limit for eating it also check is all philos
-have eaten the required amount of times*/
 int	checker(t_data *data)
 {
 	int		philos_full;

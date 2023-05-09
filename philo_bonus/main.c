@@ -6,13 +6,12 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 08:54:29 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/08 16:44:15 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/*Reminds user of input rules*/
 int	write_usage(void)
 {
 	printf("Usage ./philo\n"
@@ -25,7 +24,6 @@ int	write_usage(void)
 	return (1);
 }
 
-/*Checks input usage and initializes respective values*/
 int	usage(int ac, char **av, t_data *data)
 {
 	if (check_int(ac, av))
@@ -46,7 +44,6 @@ int	usage(int ac, char **av, t_data *data)
 	return (0);
 }
 
-/*Initializes values in structs*/
 int	prep_data(t_data *data)
 {
 	int	i;
@@ -74,8 +71,6 @@ int	prep_data(t_data *data)
 	return (0);
 }
 
-/*Sets start time, creates threads, starts monitoring status of each thread
-and joins threads*/
 int	start(t_data *data)
 {
 	int	i;

@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 11:05:38 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/09 13:21:40 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,8 @@ int	prep_data(t_data *data)
 	data->forks = sem_open("/forks_s", O_CREAT, 0644, data->n);
 	data->write_s = sem_open("/write_s", O_CREAT, 0644, 1);
 	data->end_s = sem_open("/end_s", O_CREAT, 0644, 1);
-	data->counter_s = sem_open("/counter_s", O_CREAT, 0644, 1);
-	data->last_s = sem_open("/last_s", O_CREAT, 0644, 1);
 	if (data->forks == SEM_FAILED || data->write_s == SEM_FAILED
-		|| data->end_s == SEM_FAILED || data->counter_s == SEM_FAILED
-		|| data->last_s == SEM_FAILED)
+		|| data->end_s == SEM_FAILED)
 		return (1);
 	return (0);
 }

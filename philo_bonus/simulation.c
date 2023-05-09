@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 11:59:31 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/09 13:38:03 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,21 +81,40 @@ void	*single(t_philo *philo)
 	return (0);
 }
 
-void	simulation(t_philo *philos)
+int	reopen(t_philo *philo)
 {
-	t_philo			*philo;
+	philo->data->forks = sem_open("/forks_s", O_CREAT, 0644, philo->data->n);
+	philo->data->write_s = sem_open("/write_s", O_CREAT, 0644, 1);
+	philo->data->end_s = sem_open("/end_s", O_CREAT, 0644, 1);
+	philo->counter_s = sem_open("/counter_s", O_CREAT, 0644, 1);
+	philo->last_s = sem_open("/last_s", O_CREAT, 0644, 1);
+	if (philo->data->forks == SEM_FAILED || philo->data->write_s == SEM_FAILED
+		|| philo->data->end_s == SEM_FAILED || philo->counter_s == SEM_FAILED
+		|| philo->last_s == SEM_FAILED)
+		return (1);
+	return (0);
+}
 
-	philo = (t_philo *)philos;
-	while (get_time() < philo->data->start_time)
-		usleep(1000);
+void	*simulation(t_philo *philo)
+{
+	t_philo	*philo;
+	time_t	wait;
+
+	if (reopen(philo))
+		return (0);
+	wait = philo->data->start_time - get_time();
+	if (wait > 0)
+		usleep(wait * 1000);
+	/* while (get_time() < philo->data->start_time)
+		usleep(1000); */
 	if (philo->data->n == 1)
 		return (single(philo));
 	if (philo->spot % 2)
 		think(philo);
 	while (!end_check(philo->data))
 	{
-		life(philo, philo->fork1, philo->fork2);
+		life(philo);
 		think(philo);
 	}
-	return ;
+	return (0);
 }

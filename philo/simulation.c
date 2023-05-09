@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 11:59:12 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/09 13:07:15 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,15 @@ at the same time.
 Main loop repeats while checking for the end of simulation flag*/
 void	*simulation(void *philos)
 {
-	t_philo			*philo;
+	t_philo	*philo;
+	time_t	wait;
 
 	philo = (t_philo *)philos;
-	while (get_time() < philo->data->start_time)
-		usleep(1000);
+	wait = philo->data->start_time - get_time();
+	if (wait > 0)
+		usleep(wait * 1000);
+	/* while (get_time() < philo->data->start_time)
+		usleep(1000); */
 	if (philo->data->n == 1)
 		return (single(philo, philo->fork1));
 	if (philo->spot % 2)

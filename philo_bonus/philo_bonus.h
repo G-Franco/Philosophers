@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:57:11 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 11:02:53 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/09 11:47:49 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int				status(t_data *data);
 void			think(t_philo *philo);
 void			life(t_philo *philo, pthread_mutex_t *fork1,
 					pthread_mutex_t *fork2);
-void			*single(t_philo *philo, pthread_mutex_t *fork1);
+void			*single(t_philo *philo);
 void			simulation(t_philo *philos);
 
 /*utils.c*/

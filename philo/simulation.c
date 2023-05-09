@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 09:08:47 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/09 11:59:12 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	*simulation(void *philos)
 
 	philo = (t_philo *)philos;
 	while (get_time() < philo->data->start_time)
-		continue ;
+		usleep(1000);
 	if (philo->data->n == 1)
 		return (single(philo, philo->fork1));
 	if (philo->spot % 2)

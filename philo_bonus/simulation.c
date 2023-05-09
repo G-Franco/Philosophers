@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 11:02:02 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/09 11:59:31 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,13 @@ void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
 	return ;
 }
 
-void	*single(t_philo *philo, pthread_mutex_t *fork1)
+void	*single(t_philo *philo)
 {
-	pthread_mutex_lock(fork1);
+	sem_wait(philo->data->forks);
 	message(philo, philo->spot, "has taken a fork", 0);
 	usleep(philo->data->ttdie * 1000);
 	message(philo, philo->spot, "died", 0);
-	pthread_mutex_unlock(fork1);
+	sem_post(philo->data->forks);
 	return (0);
 }
 
@@ -87,9 +87,9 @@ void	simulation(t_philo *philos)
 
 	philo = (t_philo *)philos;
 	while (get_time() < philo->data->start_time)
-		continue ;
+		usleep(1000);
 	if (philo->data->n == 1)
-		return (single(philo, philo->fork1));
+		return (single(philo));
 	if (philo->spot % 2)
 		think(philo);
 	while (!end_check(philo->data))

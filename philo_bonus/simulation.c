@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 13:38:03 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/10 14:25:53 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,12 @@
 
 int	status(t_data *data)
 {
-	t_data	*data_n;
-
-	data_n = (t_data *)data;
-	while (get_time() < data_n->start_time)
-		continue ;
+	sync_start(data);
 	while (1)
 	{
 		if (checker(data))
 			return (0);
-		usleep(500);
+		usleep(1000);
 	}
 	return (0);
 }
@@ -32,11 +28,11 @@ void	think(t_philo *philo)
 {
 	time_t	time_to_think;
 
-	pthread_mutex_lock(&philo->last_m);
+	sem_wait(philo->last_s);
 	time_to_think = (philo->data->ttdie
 			- (get_time() - philo->last_meal)
 			- philo->data->tteat) / 2;
-	pthread_mutex_unlock(&philo->last_m);
+	sem_post(philo->last_s);
 	if (time_to_think < 0)
 		time_to_think = 0;
 	if (time_to_think == 0)
@@ -47,24 +43,24 @@ void	think(t_philo *philo)
 	usleep(time_to_think * 1000);
 }
 
-void	life(t_philo *philo, pthread_mutex_t *fork1, pthread_mutex_t *fork2)
+void	life(t_philo *philo)
 {
-	pthread_mutex_lock(fork1);
+	sem_wait(philo->data->forks);
 	message(philo, philo->spot, "has taken a fork", 0);
-	pthread_mutex_lock(fork2);
+	sem_wait(philo->data->forks);
 	message(philo, philo->spot, "has taken a fork", 0);
-	pthread_mutex_lock(&philo->last_m);
+	sem_wait(philo->last_s);
 	philo->last_meal = get_time();
-	pthread_mutex_unlock(&philo->last_m);
+	sem_post(philo->last_s);
 	message(philo, philo->spot, "is eating", 0);
 	usleep(philo->data->tteat * 1000);
-	pthread_mutex_unlock(fork1);
-	pthread_mutex_unlock(fork2);
+	sem_post(philo->data->forks);
+	sem_post(philo->data->forks);
 	if (!end_check(philo->data))
 	{
-		pthread_mutex_lock(&philo->counter_m);
+		sem_wait(philo->counter_s);
 		philo->meals++;
-		pthread_mutex_unlock(&philo->counter_m);
+		sem_post(philo->counter_s);
 	}
 	message(philo, philo->spot, "is sleeping", 0);
 	usleep(philo->data->ttsleep * 1000);
@@ -97,16 +93,9 @@ int	reopen(t_philo *philo)
 
 void	*simulation(t_philo *philo)
 {
-	t_philo	*philo;
-	time_t	wait;
-
 	if (reopen(philo))
 		return (0);
-	wait = philo->data->start_time - get_time();
-	if (wait > 0)
-		usleep(wait * 1000);
-	/* while (get_time() < philo->data->start_time)
-		usleep(1000); */
+	sync_start(philo->data);
 	if (philo->data->n == 1)
 		return (single(philo));
 	if (philo->spot % 2)

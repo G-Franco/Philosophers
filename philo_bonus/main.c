@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 13:21:40 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/10 14:30:40 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,25 @@ int	start(t_data *data)
 		pid = fork();
 		if (pid == -1)
 			return (1);
+		else if (pid > 0)
+			data->pid[i] = &pid;
 		else if (!pid)
 			simulation(data->philo[i]);
 	}
 	if (data->n > 1)
 		status(data);
 	return (0);
+}
+
+void	close_sim(t_data *data)
+{
+	int	i;
+
+	sync_start(data);
+	i = -1;
+	while (++i < data->n)
+		waitpid(*(data->pid[i]), 0, 0);
+	return ;
 }
 
 int	main(int ac, char **av)
@@ -95,12 +108,14 @@ int	main(int ac, char **av)
 		return (1);
 	i = -1;
 	data.philo = (t_philo **)malloc(sizeof(t_philo *) * (data.n));
+	data.pid = (pid_t **)malloc(sizeof(pid_t *) * (data.n));
 	if (!data.philo)
 		return (free_data(&data));
 	i = -1;
 	while (++i < data.n)
 	{
 		data.philo[i] = (t_philo *)malloc(sizeof(t_philo));
+		data.pid[i] = (pid_t *)malloc(sizeof(pid_t));
 		if (!data.philo[i])
 			return (free_data(&data));
 	}
@@ -108,6 +123,7 @@ int	main(int ac, char **av)
 		return (free_data(&data));
 	if (start(&data))
 		return (free_data(&data));
+	close_sim(&data);
 	free_data(&data);
 	return (0);
 }

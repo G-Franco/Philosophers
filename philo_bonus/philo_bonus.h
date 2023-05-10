@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:57:11 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 13:32:13 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/10 14:29:30 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/time.h>
+# include <sys/wait.h>
 # include <pthread.h>
 # include <semaphore.h>
 # include <fcntl.h>
@@ -44,6 +45,7 @@ typedef struct s_data
 	time_t			ttsleep;
 	time_t			tteat;
 	time_t			ttdie;
+	pid_t			**pid;
 	int				n;
 	int				end;
 	int				opt_eat;
@@ -54,12 +56,14 @@ int		write_usage(void);
 int		usage(int ac, char **av, t_data *data);
 int		prep_data(t_data *data);
 int		start(t_data *data);
+void	close_sim(t_data *data);
 
 /*simulation.c*/
 int		status(t_data *data);
 void	think(t_philo *philo);
 void	life(t_philo *philo);
 void	*single(t_philo *philo);
+int		reopen(t_philo *philo);
 void	*simulation(t_philo *philos);
 
 /*utils.c*/
@@ -75,5 +79,9 @@ int		end_check(t_data *data);
 void	end(t_data *data);
 int		dead(t_philo *philo);
 int		checker(t_data *data);
+
+/*utils3*/
+void	sync_start(t_data *data);
+
 
 #endif

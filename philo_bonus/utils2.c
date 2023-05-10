@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:16:32 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 11:16:08 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/10 09:46:39 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,16 @@ void	end(t_data *data)
 
 int	dead(t_philo *philo)
 {
-	sem_wait(philo->data->last_s);
+	sem_wait(philo->last_s);
 	if (get_time() - philo->last_meal
 		>= philo->data->ttdie)
 	{
 		end(philo->data);
 		message(philo, philo->spot, "died", 1);
-		sem_post(philo->data->last_s);
+		sem_post(philo->last_s);
 		return (1);
 	}
-	sem_post(philo->data->last_s);
+	sem_post(philo->last_s);
 	return (0);
 }
 
@@ -73,10 +73,10 @@ int	checker(t_data *data)
 			return (1);
 		if (!data->opt_eat)
 			continue ;
-		sem_wait(data->counter_s);
+		sem_wait(data->philo[i]->counter_s);
 		if (data->philo[i]->meals < data->opt_eat)
 			philos_full = 0;
-		sem_post(data->counter_s);
+		sem_post(data->philo[i]->counter_s);
 	}
 	if (data->opt_eat && philos_full == 1)
 	{

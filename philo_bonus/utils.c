@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 10:51:12 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/10 11:33:07 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,17 @@ int	free_data(t_data *data)
 
 	i = -1;
 	while (++i < data->n)
+	{
+		sem_close(data->philo[i]->counter_s);
+		sem_close(data->philo[i]->last_s);
 		free(data->philo[i]);
+		free(data->pid[i]);
+	}
 	free(data->philo);
+	free(data->pid);
 	sem_close(data->forks);
 	sem_close(data->write_s);
 	sem_close(data->end_s);
-	sem_close(data->counter_s);
-	sem_close(data->last_s);
 	sem_clean();
 	return (1);
 }

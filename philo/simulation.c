@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 13:07:15 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/10 09:16:13 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,17 @@
 int	status(t_data *data)
 {
 	t_data	*data_n;
+	time_t	wait;
 
 	data_n = (t_data *)data;
-	while (get_time() < data_n->start_time)
-		continue ;
+	wait = data->start_time - get_time();
+	if (wait > 0)
+		usleep(wait * 1000);
 	while (1)
 	{
 		if (checker(data))
 			return (0);
-		usleep(500);
+		usleep(1000);
 	}
 	return (0);
 }
@@ -102,8 +104,6 @@ void	*simulation(void *philos)
 	wait = philo->data->start_time - get_time();
 	if (wait > 0)
 		usleep(wait * 1000);
-	/* while (get_time() < philo->data->start_time)
-		usleep(1000); */
 	if (philo->data->n == 1)
 		return (single(philo, philo->fork1));
 	if (philo->spot % 2)

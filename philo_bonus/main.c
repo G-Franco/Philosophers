@@ -54,8 +54,15 @@ int	prep_data(t_data *data)
 		data->philo[i]->meals = 0;
 		data->philo[i]->spot = i;
 		data->philo[i]->data = data;
+		sem_unlink("/last_s");
+		sem_unlink("/counter_s");
+		data->philo[i]->last_s = sem_open("/last_s", O_CREAT, 0644, 1);
+		data->philo[i]->counter_s = sem_open("/counter_s", O_CREAT, 0644, 1);
 	}
 	data->end = 0;
+	sem_unlink("/forks_s");
+	sem_unlink("/write_s");
+	sem_unlink("/end_s");
 	data->forks = sem_open("/forks_s", O_CREAT, 0644, data->n);
 	data->write_s = sem_open("/write_s", O_CREAT, 0644, 1);
 	data->end_s = sem_open("/end_s", O_CREAT, 0644, 1);
@@ -68,23 +75,18 @@ int	prep_data(t_data *data)
 int	start(t_data *data)
 {
 	int		i;
-	pid_t	pid;
 
 	i = -1;
 	data->start_time = get_time() + (data->n * 2);
 	while (++i < data->n)
 	{
 		data->philo[i]->last_meal = data->start_time;
-		pid = fork();
-		if (pid == -1)
+		*data->pid[i] = fork();
+		if (*data->pid[i] == -1)
 			return (1);
-		else if (pid > 0)
-			data->pid[i] = &pid;
-		else if (!pid)
+		else if (!data->pid[i])
 			simulation(data->philo[i]);
 	}
-	if (data->n > 1)
-		status(data);
 	return (0);
 }
 
@@ -92,10 +94,10 @@ void	close_sim(t_data *data)
 {
 	int	i;
 
-	sync_start(data);
 	i = -1;
+	waitpid(-1, 0, 0);
 	while (++i < data->n)
-		waitpid(*(data->pid[i]), 0, 0);
+		kill(*data->pid[i], SIGTERM);
 	return ;
 }
 

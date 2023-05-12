@@ -12,12 +12,15 @@
 
 #include "philo_bonus.h"
 
-int	status(t_data *data)
+void	*status(void *philos)
 {
-	sync_start(data);
+	t_philo	*philo;
+
+	philo = (t_philo *)philos;
+	sync_start(philo->data);
 	while (1)
 	{
-		if (checker(data))
+		if (dead(philo))
 			return (0);
 		usleep(1000);
 	}
@@ -77,23 +80,11 @@ void	*single(t_philo *philo)
 	return (0);
 }
 
-int	reopen(t_philo *philo)
-{
-	philo->data->forks = sem_open("/forks_s", O_CREAT, 0644, philo->data->n);
-	philo->data->write_s = sem_open("/write_s", O_CREAT, 0644, 1);
-	philo->data->end_s = sem_open("/end_s", O_CREAT, 0644, 1);
-	philo->counter_s = sem_open("/counter_s", O_CREAT, 0644, 1);
-	philo->last_s = sem_open("/last_s", O_CREAT, 0644, 1);
-	if (philo->data->forks == SEM_FAILED || philo->data->write_s == SEM_FAILED
-		|| philo->data->end_s == SEM_FAILED || philo->counter_s == SEM_FAILED
-		|| philo->last_s == SEM_FAILED)
-		return (1);
-	return (0);
-}
-
 void	*simulation(t_philo *philo)
 {
-	if (reopen(philo))
+	if (pthread_create(philo->id, 0, status, philo))
+		return (0);
+	if (pthread_detach(*philo->id))
 		return (0);
 	sync_start(philo->data);
 	if (philo->data->n == 1)

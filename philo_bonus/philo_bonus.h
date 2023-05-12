@@ -23,11 +23,13 @@
 # include <semaphore.h>
 # include <fcntl.h>
 # include <sys/stat.h>
+# include <signal.h>
 
 struct	s_data;
 typedef struct s_philo
 {
 	struct s_data	*data;
+	pthread_t		*id;
 	sem_t			*counter_s;
 	sem_t			*last_s;
 	int				spot;
@@ -59,11 +61,10 @@ int		start(t_data *data);
 void	close_sim(t_data *data);
 
 /*simulation.c*/
-int		status(t_data *data);
+void	*status(void *philos);
 void	think(t_philo *philo);
 void	life(t_philo *philo);
 void	*single(t_philo *philo);
-int		reopen(t_philo *philo);
 void	*simulation(t_philo *philos);
 
 /*utils.c*/

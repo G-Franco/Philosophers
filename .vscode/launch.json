@@ -4,7 +4,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/philo/philo",
+            "program": "${workspaceFolder}/philo_bonus/philo_bonus",
             "args": ["5", "800", "200", "200"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

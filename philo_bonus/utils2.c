@@ -60,7 +60,7 @@ int	dead(t_philo *philo)
 	return (0);
 }
 
-int	checker(t_data *data)
+/* int	checker(t_data *data)
 {
 	int		philos_full;
 	int		i;
@@ -84,4 +84,4 @@ int	checker(t_data *data)
 		return (1);
 	}
 	return (0);
-}
+} */

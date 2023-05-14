@@ -93,11 +93,20 @@ int	start(t_data *data)
 void	close_sim(t_data *data)
 {
 	int	i;
+	int	value;
 
 	i = -1;
-	waitpid(-1, 0, 0);
-	while (++i < data->n)
-		kill(*data->pid[i], SIGTERM);
+	while(++i < data->n)
+	{
+		waitpid(-1, &value, 0);
+		if (value != 0)
+		{
+			i = -1;
+			while (++i < data->n)
+				kill(*data->pid[i], SIGTERM);
+			break ;
+		}
+	}
 	return ;
 }
 

@@ -6,12 +6,13 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 09:02:59 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/15 10:25:58 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/15 13:03:41 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
+/*Initialises everything*/
 int	prep_data(t_data *data)
 {
 	int	i;
@@ -36,6 +37,7 @@ int	prep_data(t_data *data)
 	return (0);
 }
 
+/*Sets simulation start time, creates child processes and starts simulation*/
 int	start(t_data *data)
 {
 	int		i;
@@ -54,6 +56,8 @@ int	start(t_data *data)
 	return (0);
 }
 
+/*Waits for any process that exits with an error (1).
+If any does exit with an error, every process is killed*/
 void	close_sim(t_data *data)
 {
 	int	i;

@@ -6,12 +6,13 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/15 10:27:41 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/15 13:06:58 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
+/*Runs every ms to check if the philo has died and exits process with error*/
 void	*status(void *philos)
 {
 	t_philo	*philo;
@@ -21,8 +22,7 @@ void	*status(void *philos)
 	while (1)
 	{
 		sem_wait(philo->data->last_s);
-		if (get_time() - philo->last_meal
-			>= philo->data->ttdie)
+		if (get_time() - philo->last_meal >= philo->data->ttdie)
 		{
 			message(philo, philo->spot, "died");
 			exit(1);
@@ -33,6 +33,9 @@ void	*status(void *philos)
 	return (0);
 }
 
+/*To avoid philosophers eating straight away after waking up
+and monopolizing forks, a delay is necessary to make sure
+they start eating at the right time if they can afford it*/
 void	think(t_philo *philo)
 {
 	time_t	time_to_think;
@@ -52,6 +55,8 @@ void	think(t_philo *philo)
 	usleep(time_to_think * 1000);
 }
 
+/*All remaining processes except thinking. Philos take forks, eat and sleep
+while writing status messages and updating their meal count*/
 void	life(t_philo *philo)
 {
 	sem_wait(philo->data->forks);
@@ -59,7 +64,10 @@ void	life(t_philo *philo)
 	sem_wait(philo->data->forks);
 	message(philo, philo->spot, "has taken a fork");
 	sem_wait(philo->data->last_s);
-	philo->last_meal = get_time();
+	if (get_time() - philo->last_meal < philo->data->ttdie)
+		philo->last_meal = get_time();
+	else
+		return ;
 	sem_post(philo->data->last_s);
 	message(philo, philo->spot, "is eating");
 	usleep(philo->data->tteat * 1000);
@@ -72,6 +80,10 @@ void	life(t_philo *philo)
 	usleep(philo->data->ttsleep * 1000);
 }
 
+/*Delays start so that everyone is synchronized.
+Ensures that even and odd philos start at different
+points in logic to avoid everyone going for the forks
+at the same time.*/
 void	simulation(t_philo *philo)
 {
 	if (pthread_create(&philo->id, 0, status, philo))

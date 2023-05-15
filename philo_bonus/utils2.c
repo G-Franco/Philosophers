@@ -6,12 +6,13 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:16:32 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/15 10:27:03 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/15 13:10:18 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
+/*Writes given message*/
 void	message(t_philo *philo, int n, char *msg)
 {
 	sem_wait(philo->data->write_s);
@@ -20,6 +21,7 @@ void	message(t_philo *philo, int n, char *msg)
 	return ;
 }
 
+/*Returns current time in ms*/
 time_t	get_time(void)
 {
 	struct timeval	time;
@@ -28,6 +30,8 @@ time_t	get_time(void)
 	return (time.tv_sec * 1000 + (time.tv_usec / 1000));
 }
 
+/*Calculates how long it needs to wait before starting simulation
+and sleeps for that duration*/
 void	sync_start(t_data *data)
 {
 	time_t	wait;
@@ -38,6 +42,7 @@ void	sync_start(t_data *data)
 	return ;
 }
 
+/*Unlinks used semaphores*/
 void	sem_clean(void)
 {
 	sem_unlink("/forks_s");
@@ -45,6 +50,7 @@ void	sem_clean(void)
 	sem_unlink("/last_s");
 }
 
+/*Frees everything*/
 int	free_data(t_data *data)
 {
 	int	i;

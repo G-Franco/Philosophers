@@ -6,12 +6,13 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/15 10:26:08 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/15 13:08:33 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
+/*Checks if input contains only ints*/
 int	check_int(int ac, char **av)
 {
 	int	i;
@@ -30,6 +31,7 @@ int	check_int(int ac, char **av)
 	return (0);
 }
 
+/*Self explanatory*/
 int	ft_atoi(char *str)
 {
 	int	nbr;
@@ -55,6 +57,7 @@ int	ft_atoi(char *str)
 	return (nbr * sig);
 }
 
+/*Writes wrong usage message*/
 int	write_usage(void)
 {
 	printf("Usage ./philo\n"
@@ -67,6 +70,8 @@ int	write_usage(void)
 	return (1);
 }
 
+/*Checks for correct usage in input,
+only accepts positive ints*/
 int	usage(int ac, char **av, t_data *data)
 {
 	if (check_int(ac, av))

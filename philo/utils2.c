@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:16:32 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/09 09:08:11 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/15 12:59:06 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	dead(t_philo *philo)
 	return (0);
 }
 
-/*Runs the death checker forevery philo and
+/*Runs the death checker for every philo and
 if there is a limit for eating it also check is all philos
 have eaten the required amount of times*/
 int	checker(t_data *data)

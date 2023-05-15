@@ -6,82 +6,59 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:16:32 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/10 09:46:39 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/15 10:27:03 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-void	message(t_philo *philo, int n, char *msg, int end)
+void	message(t_philo *philo, int n, char *msg)
 {
 	sem_wait(philo->data->write_s);
-	if (!end && end_check(philo->data))
-	{
-		sem_post(philo->data->write_s);
-		return ;
-	}
 	printf("%lu %i %s\n", get_time() - philo->data->start_time, n + 1, msg);
 	sem_post(philo->data->write_s);
 	return ;
 }
 
-int	end_check(t_data *data)
+time_t	get_time(void)
 {
-	sem_wait(data->end_s);
-	if (data->end)
-	{
-		sem_post(data->end_s);
-		return (1);
-	}
-	sem_post(data->end_s);
-	return (0);
+	struct timeval	time;
+
+	gettimeofday(&time, 0);
+	return (time.tv_sec * 1000 + (time.tv_usec / 1000));
 }
 
-void	end(t_data *data)
+void	sync_start(t_data *data)
 {
-	sem_wait(data->end_s);
-	data->end = 1;
-	sem_post(data->end_s);
+	time_t	wait;
+
+	wait = data->start_time - get_time();
+	if (wait > 0)
+		usleep(wait * 1000);
 	return ;
 }
 
-int	dead(t_philo *philo)
+void	sem_clean(void)
 {
-	sem_wait(philo->last_s);
-	if (get_time() - philo->last_meal
-		>= philo->data->ttdie)
-	{
-		end(philo->data);
-		message(philo, philo->spot, "died", 1);
-		sem_post(philo->last_s);
-		return (1);
-	}
-	sem_post(philo->last_s);
-	return (0);
+	sem_unlink("/forks_s");
+	sem_unlink("/write_s");
+	sem_unlink("/last_s");
 }
 
-/* int	checker(t_data *data)
+int	free_data(t_data *data)
 {
-	int		philos_full;
-	int		i;
+	int	i;
 
 	i = -1;
-	philos_full = 1;
 	while (++i < data->n)
 	{
-		if (dead(data->philo[i]))
-			return (1);
-		if (!data->opt_eat)
-			continue ;
-		sem_wait(data->philo[i]->counter_s);
-		if (data->philo[i]->meals < data->opt_eat)
-			philos_full = 0;
-		sem_post(data->philo[i]->counter_s);
+		free(data->philo[i]);
 	}
-	if (data->opt_eat && philos_full == 1)
-	{
-		end(data);
-		return (1);
-	}
-	return (0);
-} */
+	free(data->philo);
+	free(data->pid);
+	sem_close(data->last_s);
+	sem_close(data->forks);
+	sem_close(data->write_s);
+	sem_clean();
+	return (1);
+}

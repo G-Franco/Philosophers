@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/10 11:33:07 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/15 10:26:08 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,40 +55,34 @@ int	ft_atoi(char *str)
 	return (nbr * sig);
 }
 
-void	sem_clean(void)
+int	write_usage(void)
 {
-	sem_unlink("/forks_s");
-	sem_unlink("/write_s");
-	sem_unlink("/end_s");
-	sem_unlink("/counter_s");
-	sem_unlink("/last_s");
-}
-
-int	free_data(t_data *data)
-{
-	int	i;
-
-	i = -1;
-	while (++i < data->n)
-	{
-		sem_close(data->philo[i]->counter_s);
-		sem_close(data->philo[i]->last_s);
-		free(data->philo[i]);
-		free(data->pid[i]);
-	}
-	free(data->philo);
-	free(data->pid);
-	sem_close(data->forks);
-	sem_close(data->write_s);
-	sem_close(data->end_s);
-	sem_clean();
+	printf("Usage ./philo\n"
+		"number_of_philosophers (int)\n"
+		"time_to_die (ms)\n"
+		"time_to_eat (ms)\n"
+		"time_to_sleep (ms)\n"
+		"[number_of_times_each_philosopher_must_eat] (int)\n"
+		"Use only positive values!\n");
 	return (1);
 }
 
-time_t	get_time(void)
+int	usage(int ac, char **av, t_data *data)
 {
-	struct timeval	time;
-
-	gettimeofday(&time, 0);
-	return (time.tv_sec * 1000 + (time.tv_usec / 1000));
+	if (check_int(ac, av))
+		return (write_usage());
+	if (ac < 5 || ac > 6 || !av[1] || !av[2] || !av[3] || !av[4])
+		return (write_usage());
+	data->n = ft_atoi(av[1]);
+	data->ttdie = (unsigned long)ft_atoi(av[2]);
+	data->tteat = (unsigned long)ft_atoi(av[3]);
+	data->ttsleep = (unsigned long)ft_atoi(av[4]);
+	if (av[5])
+		data->opt_eat = ft_atoi(av[5]);
+	else
+		data->opt_eat = 0;
+	if (data->n < 1 || data->ttdie <= 0 || data->tteat <= 0
+		|| data->ttsleep <= 0 || data->opt_eat < 0)
+		return (write_usage());
+	return (0);
 }

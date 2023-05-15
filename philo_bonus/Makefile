@@ -1,5 +1,5 @@
 NAME	= philo_bonus
-SRC		= main.c simulation.c utils.c utils2.c utils3.c
+SRC		= main.c simulation.c utils.c utils2.c
 CC		= @cc
 CFLAGS	= -Wall -Werror -Wextra -g -lpthread -lrt
 

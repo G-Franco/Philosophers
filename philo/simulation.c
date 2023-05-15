@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/10 09:16:13 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/05/15 16:03:16 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 /*Starts loop to check simulation end conditions*/
 int	status(t_data *data)
 {
-	t_data	*data_n;
 	time_t	wait;
 
-	data_n = (t_data *)data;
 	wait = data->start_time - get_time();
 	if (wait > 0)
 		usleep(wait * 1000);

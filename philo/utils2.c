@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:16:32 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/15 12:59:06 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/06/30 17:20:40 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	dead(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->last_m);
 	if (get_time() - philo->last_meal
-		>= philo->data->ttdie)
+		>= philo->data->ttdie2)
 	{
 		end(philo->data);
 		message(philo, philo->spot, "died", 1);

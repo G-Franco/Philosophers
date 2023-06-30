@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/06/30 16:55:07 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/06/30 17:26:08 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*status(void *philos)
 	while (1)
 	{
 		sem_wait(philo->data->last_s);
-		if (get_time() - philo->last_meal >= philo->data->ttdie)
+		if (get_time() - philo->last_meal >= philo->data->ttdie2)
 		{
 			message(philo, philo->spot, "died");
 			exit(1);

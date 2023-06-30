@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:57:11 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/08 16:43:56 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/06/30 17:20:56 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_data
 	time_t			ttsleep;
 	time_t			tteat;
 	time_t			ttdie;
+	time_t			ttdie2;
 	int				n;
 	int				end;
 	int				opt_eat;

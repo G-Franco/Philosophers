@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:47:51 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/15 13:06:58 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/06/30 16:55:07 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	think(t_philo *philo)
 	if (time_to_think > 600)
 		time_to_think = 200;
 	message(philo, philo->spot, "is thinking");
-	usleep(time_to_think * 1000);
+	usleep(time_to_think);
 }
 
 /*All remaining processes except thinking. Philos take forks, eat and sleep
@@ -70,14 +70,14 @@ void	life(t_philo *philo)
 		return ;
 	sem_post(philo->data->last_s);
 	message(philo, philo->spot, "is eating");
-	usleep(philo->data->tteat * 1000);
+	usleep(philo->data->tteat);
 	philo->meals++;
 	sem_post(philo->data->forks);
 	sem_post(philo->data->forks);
 	if (philo->meals == philo->data->opt_eat)
 		exit(0);
 	message(philo, philo->spot, "is sleeping");
-	usleep(philo->data->ttsleep * 1000);
+	usleep(philo->data->ttsleep);
 }
 
 /*Delays start so that everyone is synchronized.

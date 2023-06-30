@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 09:19:24 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/05/15 13:08:33 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/06/30 16:55:59 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ int	usage(int ac, char **av, t_data *data)
 	if (ac < 5 || ac > 6 || !av[1] || !av[2] || !av[3] || !av[4])
 		return (write_usage());
 	data->n = ft_atoi(av[1]);
-	data->ttdie = (unsigned long)ft_atoi(av[2]);
-	data->tteat = (unsigned long)ft_atoi(av[3]);
-	data->ttsleep = (unsigned long)ft_atoi(av[4]);
+	data->ttdie = (unsigned long)ft_atoi(av[2]) * 1000;
+	data->tteat = (unsigned long)ft_atoi(av[3]) * 1000;
+	data->ttsleep = (unsigned long)ft_atoi(av[4]) * 1000;
 	if (av[5])
 		data->opt_eat = ft_atoi(av[5]);
 	else

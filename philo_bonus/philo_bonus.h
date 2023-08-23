@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:57:11 by gacorrei          #+#    #+#             */
-/*   Updated: 2023/06/30 17:24:53 by gacorrei         ###   ########.fr       */
+/*   Updated: 2023/08/23 16:15:08 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ typedef struct s_data
 	time_t			ttsleep;
 	time_t			tteat;
 	time_t			ttdie;
-	time_t			ttdie2;
 	pid_t			*pid;
 	int				n;
 	int				end;

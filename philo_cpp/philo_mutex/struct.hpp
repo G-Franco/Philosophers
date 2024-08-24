@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Philo.hpp                                          :+:      :+:    :+:   */
+/*   struct.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/24 10:17:39 by gacorrei          #+#    #+#             */
-/*   Updated: 2024/08/24 15:26:48 by gacorrei         ###   ########.fr       */
+/*   Created: 2024/08/24 15:02:08 by gacorrei          #+#    #+#             */
+/*   Updated: 2024/08/24 15:15:10 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-#include <iostream>
-#include "struct.hpp"
+#include <mutex>
+#include <vector>
 
-class Philo
-{
-    private:
-      int   _id;
-      data  *_data;
-      int   _left_fork;
-      int   _right_fork;
-      int   _last_meal;
-      int   _total_meals;
+struct data {
+  int philos;
+  int time_to_die;
+  int time_to_eat;
+  int time_to_sleep;
+  int meals;
+  bool end;
+  std::vector<std::mutex> forks;
+  std::mutex end_m;
+  std::mutex write_m;
 
-    public:
-      Philo(int id, struct data &data);
-      ~Philo();
+  data(int philos, int die, int eat, int sleep, int meals)
+      : philos(philos), time_to_die(die), time_to_eat(eat),
+        time_to_sleep(sleep), meals(meals), forks(philos), end(false) {}
 };

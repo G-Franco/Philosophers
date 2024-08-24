@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 10:02:17 by gacorrei          #+#    #+#             */
-/*   Updated: 2024/08/24 11:45:31 by gacorrei         ###   ########.fr       */
+/*   Updated: 2024/08/24 16:14:28 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@
 // access the resource at a time
 
 #include "Philo.hpp"
+#include "struct.hpp"
 #include <string>
+#include <thread>
 
 const std::string USAGE_MESSAGE =
     "Usage: ./philo\n"
@@ -29,9 +31,8 @@ const std::string USAGE_MESSAGE =
     "USE ONLY POSITIVE INTEGERS\n"
     "TIMES MUST BE IN ms";
 
-void check_input(int ac, char **av) {
-  int philos, time_to_die, time_to_eat, time_to_sleep, meals;
-
+void check_input(int ac, char **av, int &philos, int &time_to_die,
+                 int &time_to_eat, int &time_to_sleep, int &meals) {
   if (ac < 5 || ac > 6) {
     throw std::runtime_error(USAGE_MESSAGE);
   }
@@ -50,12 +51,18 @@ void check_input(int ac, char **av) {
   }
 }
 
-int main(int ac, char **av) {
+main(int ac, char **av) {
+  int philos, time_to_die, time_to_eat, time_to_sleep, meals;
   try {
-    check_input(ac, av);
+    check_input(ac, av, philos, time_to_die, time_to_eat, time_to_sleep, meals);
   } catch (const std::exception &e) {
     std::cerr << e.what() << '\n';
     return 1;
   }
-  return 0;
+  data data(philos, time_to_die, time_to_eat, time_to_sleep, meals);
+  std::vector<std::thread> threads(philos);
+  for (int i = 0; i < philos; i++){
+    
+  }
+    return 0;
 }

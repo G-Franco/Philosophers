@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 10:02:17 by gacorrei          #+#    #+#             */
-/*   Updated: 2024/08/24 16:14:28 by gacorrei         ###   ########.fr       */
+/*   Updated: 2024/08/25 12:45:43 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,12 @@
 // access the resource at a time
 
 #include "Philo.hpp"
-#include "struct.hpp"
 #include <string>
 #include <thread>
+
+void philo_life(int index, data &data) {
+  
+}
 
 const std::string USAGE_MESSAGE =
     "Usage: ./philo\n"
@@ -60,9 +63,10 @@ main(int ac, char **av) {
     return 1;
   }
   data data(philos, time_to_die, time_to_eat, time_to_sleep, meals);
-  std::vector<std::thread> threads(philos);
-  for (int i = 0; i < philos; i++){
-    
-  }
-    return 0;
+  std::vector<std::thread> threads;
+  for (int i = 0; i < philos; i++)
+    threads.emplace_back(philo_life, i, std::ref(data));
+  for (auto &thread : threads)
+    thread.join();
+  return 0;
 }

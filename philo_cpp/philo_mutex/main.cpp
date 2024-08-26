@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 10:02:17 by gacorrei          #+#    #+#             */
-/*   Updated: 2024/08/26 12:03:32 by gacorrei         ###   ########.fr       */
+/*   Updated: 2024/08/26 15:34:45 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 
 #include "Philo.hpp"
 #include <string>
-#include <thread>
 
 #define START_TIME_LAG 10
 

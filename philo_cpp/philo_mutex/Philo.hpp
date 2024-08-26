@@ -6,13 +6,14 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 10:17:39 by gacorrei          #+#    #+#             */
-/*   Updated: 2024/08/26 12:01:24 by gacorrei         ###   ########.fr       */
+/*   Updated: 2024/08/26 15:47:03 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-#include <iostream>
 #include "struct.hpp"
+#include <iostream>
+#include <thread>
 
 class Philo
 {
@@ -22,7 +23,9 @@ class Philo
       int   _left_fork;
       int   _right_fork;
       std::chrono::time_point<std::chrono::steady_clock> _last_meal;
-      int   _total_meals;
+      std::mutex _last_m;
+      std::mutex _meals_m;
+      int _total_meals;
 
     public:
       Philo(int id, struct data &data);
@@ -30,4 +33,6 @@ class Philo
       void think();
       void eat();
       void sleep();
+      bool end_check();
+      void message(std::string message);
 };

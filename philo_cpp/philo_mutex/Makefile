@@ -6,30 +6,37 @@
 #    By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/24 09:44:07 by gacorrei          #+#    #+#              #
-#    Updated: 2024/08/24 09:52:49 by gacorrei         ###   ########.fr        #
+#    Updated: 2024/08/27 12:29:42 by gacorrei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME =	philo
 DEBUG =	philo_debug
-SRC =	main.cpp
-CC =	@c++
-CFLAGS = -Wall -Wextra -Werror -pedantic -Wshadow
-CFLAGS_D = -Wall -Wextra -Werror -pedantic -Wshadow -fno-limit-debug-info -g -fsanitize=address
+DEBUG_T =	philo_debug_thread
+SRC =	main.cpp Philo.cpp
+CC =	@g++
+CFLAGS = -Wall -Wextra -Werror -pedantic -Wshadow -std=c++11
+CFLAGS_D = -Wall -Wextra -Werror -pedantic -Wshadow -g -std=c++11 -fsanitize=address,undefined
+CFLAGS_T = -Wall -Wextra -Werror -pedantic -Wshadow -g -std=c++11 -fsanitize=thread
 
-all:		$(NAME)
+all:			$(NAME)
 
 $(NAME):	$(SRC)
-			$(CC) $(CFLAGS) $^ -o $@
+					$(CC) $(CFLAGS) $^ -o $@
 
 debug:		$(DEBUG)
 
 $(DEBUG):	$(SRC)
-			$(CC) $(CFLAGS_D) $^ -o $@
+					$(CC) $(CFLAGS_D) $^ -o $@
+
+debug_t:	$(DEBUG_T)
+
+$(DEBUG_T):	$(SRC)
+					$(CC) $(CFLAGS_T) $^ -o $@
 
 fclean:
-			@rm -f $(NAME)
+					@rm -f $(NAME) $(DEBUG) $(DEBUG_T)
 
-re:			fclean all
+re:				fclean all
 
-.PHONY: all fclean re
+.PHONY: all debug debug_t fclean re

@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 15:02:08 by gacorrei          #+#    #+#             */
-/*   Updated: 2024/08/26 11:11:18 by gacorrei         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:37:51 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,9 @@ struct data {
   std::mutex end_m;
   std::mutex write_m;
 
-  data(int philos, int die, int eat, int sleep, int meals)
-      : philos(philos),
-        time_to_die(std::chrono::milliseconds(die)),
+  data(int philos_number, int die, int eat, int sleep, int meals_number)
+      : philos(philos_number), time_to_die(std::chrono::milliseconds(die)),
         time_to_eat(std::chrono::milliseconds(eat)),
         time_to_sleep(std::chrono::milliseconds(sleep)),
-        meals(meals), forks(philos), end(false) {}
+        meals(meals_number), end(false), forks(philos_number) {}
 };

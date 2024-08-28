@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 15:18:35 by gacorrei          #+#    #+#             */
-/*   Updated: 2024/08/27 12:21:51 by gacorrei         ###   ########.fr       */
+/*   Updated: 2024/08/28 10:46:33 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,12 @@ void Philo::think() {
 }
 
 void Philo::eat() {
+  if (_data.philos == 1) {
+    std::lock_guard<std::mutex> left(_data.forks[_left_fork]);
+    message("has taken a fork", false);
+    std::this_thread::sleep_for(_data.time_to_die);
+    return;
+  }
   {
     std::lock_guard<std::mutex> left(_data.forks[_left_fork]);
     message("has taken a fork", false);

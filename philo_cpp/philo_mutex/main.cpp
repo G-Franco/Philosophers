@@ -6,7 +6,7 @@
 /*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 10:02:17 by gacorrei          #+#    #+#             */
-/*   Updated: 2024/08/27 12:30:55 by gacorrei         ###   ########.fr       */
+/*   Updated: 2024/08/28 10:24:03 by gacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,11 @@ void end(data &data) {
 // Loops over every philosopher and checks if any has died
 // and if all have eaten the required amount (if applicable)
 void overseer(std::vector<Philo> &philosophers, data &data) {
-  bool all_full = true;
+  bool all_full;
   while (true) {
+    all_full = true;
     for (auto &philo : philosophers) {
-      if (std::chrono::steady_clock::now() - philo.get_last_meal() >
+      if (std::chrono::steady_clock::now() - philo.get_last_meal() >=
           data.time_to_die) {
         end(data);
         philo.dead();
@@ -103,10 +104,6 @@ int main(int ac, char **av) {
     return 1;
   }
   data data(philos, time_to_die, time_to_eat, time_to_sleep, meals);
-  std::vector<std::thread> threads;
-  std::vector<Philo> philosophers;
-  threads.reserve(philos);
-  philosophers.reserve(philos);
   // Add some lag to the start time based on the number of philosophers
   // so that all start the simulation at the same time.
   // Without this, for a large amount of philosophers,
@@ -114,12 +111,21 @@ int main(int ac, char **av) {
   // after the start of the simulation
   data.start = std::chrono::steady_clock::now() +
                std::chrono::milliseconds(philos * START_TIME_LAG);
-  for (int i = 0; i < philos; i++) {
-    philosophers.emplace_back(i, std::ref(data));
-    threads.emplace_back(philo_life, std::ref(philosophers.back()),
-                         std::ref(data));
+  std::vector<std::thread> threads;
+  std::vector<Philo> philosophers;
+  threads.reserve(philos + 1);
+  philosophers.reserve(philos);
+  try {
+    for (int i = 0; i < philos; i++) {
+      philosophers.emplace_back(i, std::ref(data));
+      threads.emplace_back(philo_life, std::ref(philosophers.back()),
+                           std::ref(data));
+    }
+    threads.emplace_back(overseer, std::ref(philosophers), std::ref(data));
+  } catch (...) {
+    std::cerr << "Error while creating threads or philosophers.\n";
+    return 1;
   }
-  threads.emplace_back(overseer, std::ref(philosophers), std::ref(data));
   for (auto &thread : threads)
     thread.join();
   return 0;

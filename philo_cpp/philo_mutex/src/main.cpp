@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/24 10:02:17 by gacorrei          #+#    #+#             */
-/*   Updated: 2024/08/28 10:24:03 by gacorrei         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 // TODO - Use c++11 and Mutexes
 // TODO - Explore usage of c++14 features to improve
 
@@ -17,7 +5,7 @@
 // shared resources from concurrent access, ensuring that only one thread can
 // access the resource at a time
 
-#include "Philo.hpp"
+#include "../include/Philo.hpp"
 #include <string>
 
 #define START_TIME_LAG 10

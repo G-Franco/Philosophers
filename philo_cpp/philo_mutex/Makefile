@@ -1,19 +1,7 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/08/24 09:44:07 by gacorrei          #+#    #+#              #
-#    Updated: 2024/08/27 12:29:42 by gacorrei         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME =	philo
 DEBUG =	philo_debug
 DEBUG_T =	philo_debug_thread
-SRC =	main.cpp Philo.cpp
+SRC =	src/main.cpp src/Philo.cpp
 CC =	@g++
 CFLAGS = -Wall -Wextra -Werror -pedantic -Wshadow -std=c++11
 CFLAGS_D = -Wall -Wextra -Werror -pedantic -Wshadow -g -std=c++11 -fsanitize=address,undefined

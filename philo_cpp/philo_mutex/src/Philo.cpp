@@ -1,16 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Philo.cpp                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gacorrei <gacorrei@student.42lisboa.com>   +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/24 15:18:35 by gacorrei          #+#    #+#             */
-/*   Updated: 2024/08/28 10:46:33 by gacorrei         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "Philo.hpp"
+#include "../include/Philo.hpp"
 
 #define MIN_THINK_THRESHOLD 100
 #define THINK_FACTOR 2

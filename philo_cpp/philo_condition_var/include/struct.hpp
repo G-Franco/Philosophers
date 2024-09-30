@@ -11,7 +11,6 @@ struct data {
   std::chrono::time_point<std::chrono::steady_clock> start;
   int meals;
   bool end;
-  bool ok_end;
   std::vector<std::mutex> forks;
   std::mutex end_m;
   std::mutex write_m;
@@ -20,5 +19,5 @@ struct data {
       : philos(philos_number), time_to_die(std::chrono::milliseconds(die)),
         time_to_eat(std::chrono::milliseconds(eat)),
         time_to_sleep(std::chrono::milliseconds(sleep)),
-        meals(meals_number), end(false), ok_end(true), forks(philos_number) {}
+        meals(meals_number), end(false), forks(philos_number) {}
 };

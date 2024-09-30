@@ -3,10 +3,6 @@
 #include <iostream>
 #include <thread>
 
-#define MIN_THINK_THRESHOLD 100
-#define THINK_FACTOR 2
-#define START_TIME_LAG 10
-
 class Philo {
 private:
   int _id;
@@ -32,3 +28,7 @@ public:
   int get_total_meals();
   std::chrono::time_point<std::chrono::steady_clock> get_last_meal();
 };
+
+// So that the function can be seen by gtest
+void check_input(int ac, char **av, int &philos, int &time_to_die,
+                 int &time_to_eat, int &time_to_sleep, int &meals);

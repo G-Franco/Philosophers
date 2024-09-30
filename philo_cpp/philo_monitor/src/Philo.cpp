@@ -1,5 +1,8 @@
 #include "../include/Philo.hpp"
 
+#define MIN_THINK_THRESHOLD 100
+#define THINK_FACTOR 2
+
 Philo::Philo(int id, struct data &data)
     : _id(id + 1), _data(data), _last_meal(data.start), _total_meals(0) {
   _left_fork = (_id % 2) ? _id - 1 : _id % _data.philos;

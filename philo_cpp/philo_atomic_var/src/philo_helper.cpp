@@ -1,0 +1,64 @@
+#include "../include/Philo_helper.hpp"
+
+// Message to be displayed whenever an error occurs in input checks
+const std::string USAGE_MESSAGE =
+    "Usage: ./philo\n"
+    "number_of_philosophers\n"
+    "time_to_die\n"
+    "time_to_eat\n"
+    "time_to_sleep\n"
+    "[number_of_times_each_philosopher_must_eat]\n"
+    "USE ONLY POSITIVE INTEGERS\n"
+    "TIMES MUST BE IN ms";
+
+int check_input(int ac, char **av, data &data) {
+  if (ac < 5 || ac > 6)
+    throw(std::runtime_error("ERROR: " + USAGE_MESSAGE));
+
+  data.philos = std::stoi(av[1]);
+  data.time_to_die = std::chrono::milliseconds(std::stoi(av[2]));
+  data.time_to_eat = std::chrono::milliseconds(std::stoi(av[3]));
+  data.time_to_sleep = std::chrono::milliseconds(std::stoi(av[4]));
+  data.meals = ac == 6 ? std::stoi(av[5]) : 0;
+
+  if (data.philos <= 0 ||
+      data.time_to_die <= std::chrono::milliseconds(0) ||
+      data.time_to_eat <= std::chrono::milliseconds(0) ||
+      data.time_to_sleep <= std::chrono::milliseconds(0) ||
+      (ac == 6 && data.meals <= 0))
+    throw(std::runtime_error("ERROR: " + USAGE_MESSAGE));
+}
+
+int philo_atom(int ac, char **av, data &data) {
+  try {
+    check_input(ac, av, data);
+  } catch (const std::exception &e) {
+    std::cerr << e.what() << '\n';
+    return 1;
+  }
+
+  data.start = std::chrono::steady_clock::now() +
+               std::chrono::milliseconds(data.philos * START_TIME_LAG);
+  data.forks = std::vector<std::atomic<bool>>(data.philos);
+
+  std::vector<std::thread> threads;
+  std::vector<Philo> philosophers;
+  threads.reserve(data.philos + 1);
+  philosophers.reserve(data.philos);
+  try {
+    for (int i = 0; i < data.philos; i++) {
+      philosophers.emplace_back(i, data);
+      threads.emplace_back(philo_life, std::ref(philosophers.back()), data);
+    }
+    threads.emplace_back(overseer, std::ref(philosophers), data);
+  } catch (...) {
+    std::cerr << "Error while creating threads or philosophers.\n";
+    return 1;
+  }
+
+  for (auto &thread : threads)
+    thread.join();
+  if (data.ok_end.load())
+    return 0;
+  return 1;
+}

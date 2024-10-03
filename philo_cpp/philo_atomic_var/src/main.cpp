@@ -5,9 +5,10 @@
 // Atomic operations complete without the possibility of interruption,
 // ensuring data consistency in concurrent environments.
 
-#include "../include/Philo.hpp"
+#include "../include/Philo_helper.hpp"
 
 int main(int ac, char **av)
 {
-  return philo_atom(ac, av);
+  data data;
+  return philo_atom(ac, av, data);
 }

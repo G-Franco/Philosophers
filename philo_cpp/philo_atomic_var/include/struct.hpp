@@ -11,15 +11,32 @@ struct data {
   std::chrono::time_point<std::chrono::steady_clock> start;
   int meals;
   std::atomic<bool> end;
+  std::atomic<bool> ok_end;
   std::vector<std::atomic<bool>> forks;
   std::atomic<bool> write;
 
+  data()
+      : philos(0),
+        time_to_die(std::chrono::milliseconds(0)),
+        time_to_eat(std::chrono::milliseconds(0)),
+        time_to_sleep(std::chrono::milliseconds(0)),
+        meals(0),
+        end(false),
+        ok_end(false),
+        forks(),
+        write(false) {}
+
   data(int philos_number, int die, int eat, int sleep, int meals_number)
-      : philos(philos_number), time_to_die(std::chrono::milliseconds(die)),
+      : philos(philos_number),
+        time_to_die(std::chrono::milliseconds(die)),
         time_to_eat(std::chrono::milliseconds(eat)),
         time_to_sleep(std::chrono::milliseconds(sleep)),
-        meals(meals_number), end(false), forks(philos_number) {}
-  
+        meals(meals_number),
+        end(false),
+        ok_end(false),
+        forks(philos_number),
+        write(false) {}
+
   data &operator=(const data &copy)
   {
     philos = copy.philos;

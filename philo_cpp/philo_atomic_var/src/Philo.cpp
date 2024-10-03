@@ -30,9 +30,12 @@ Philo &Philo::operator=(const Philo &copy)
 }
 
 Philo::Philo(Philo &&move) noexcept
-    : _id(move._id), _left_fork(move._left_fork), _right_fork(move._right_fork),
-      _data(move._data), _last_meal(move._last_meal.load()),
-      _total_meals(move._total_meals.load())
+    : _id(move._id),
+    _left_fork(move._left_fork),
+    _right_fork(move._right_fork),
+    _data(move._data),
+    _last_meal(move._last_meal.load()),
+    _total_meals(move._total_meals.load())
 {
   move._id = -1;
   move._left_fork = -1;

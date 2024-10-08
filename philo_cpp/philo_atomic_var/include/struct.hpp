@@ -11,7 +11,7 @@ struct data {
   std::chrono::time_point<std::chrono::steady_clock> start;
   int meals;
   std::atomic<bool> end;
-  std::atomic<bool> ok_end;
+  bool ok_end;
   std::vector<std::atomic<bool>> forks;
   std::atomic<bool> write;
 
@@ -22,9 +22,9 @@ struct data {
         time_to_sleep(std::chrono::milliseconds(0)),
         meals(0),
         end(false),
-        ok_end(false),
+        ok_end(true),
         forks(),
-        write(false) {}
+        write(true) {}
 
   data(int philos_number, int die, int eat, int sleep, int meals_number)
       : philos(philos_number),
@@ -33,9 +33,12 @@ struct data {
         time_to_sleep(std::chrono::milliseconds(sleep)),
         meals(meals_number),
         end(false),
-        ok_end(false),
+        ok_end(true),
         forks(philos_number),
-        write(false) {}
+        write(true) {
+          for (auto &fork : forks)
+            fork.store(true);
+  }
 
   data &operator=(const data &copy)
   {

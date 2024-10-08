@@ -3,9 +3,14 @@
 #include <iostream>
 #include <thread>
 
-#define MIN_THINK_THRESHOLD 100
+#define MIN_THINK_THRESHOLD std::chrono::milliseconds(100)
 #define THINK_FACTOR 2
 #define START_TIME_LAG 10
+#define FORK_MSG "has taken a fork"
+#define EAT_MSG "is eating"
+#define SLEEP_MSG "is sleeping"
+#define THINK_MSG "is thinking"
+#define DEAD_MSG "died"
 
 class Philo{
   private:
@@ -25,4 +30,10 @@ class Philo{
     bool operator==(const Philo &other);
     bool operator!=(const Philo &other);
     ~Philo();
+    std::chrono::milliseconds get_last_meal();
+    int get_total_meals();
+    void message(char *message);
+    void think();
+    void eat();
+    void sleep();
 };

@@ -40,6 +40,8 @@ int philo_atom(int ac, char **av, data &data) {
   data.start = std::chrono::steady_clock::now() +
                std::chrono::milliseconds(data.philos * START_TIME_LAG);
   data.forks = std::vector<std::atomic<bool>>(data.philos);
+  for (auto &fork : data.forks)
+    fork.store(true);
 
   std::vector<std::thread> threads;
   std::vector<Philo> philosophers;
@@ -58,7 +60,37 @@ int philo_atom(int ac, char **av, data &data) {
 
   for (auto &thread : threads)
     thread.join();
-  if (data.ok_end.load())
+  if (data.ok_end)
     return 0;
   return 1;
+}
+
+void overseer(std::vector<Philo> philosophers, data &data) {
+  bool all_ate;
+  while (1) {
+    all_ate = true;
+    for (Philo &philo : philosophers)
+    {
+      if (philo.get_last_meal() >= data.time_to_die) {
+        data.end.store(true);
+        data.ok_end = false;
+        return;
+      }
+      if (data.meals && philo.get_total_meals() < data.meals)
+        all_ate = false;
+    }
+    if (data.meals && all_ate) {
+      data.end.store(true);
+      return;
+    }
+  }
+}
+
+void philo_life(Philo &philo, data &data) {
+  std::this_thread::sleep_until(data.start);
+  while (!data.end.load()) {
+    philo.think();
+    philo.eat();
+    philo.sleep();
+  }
 }

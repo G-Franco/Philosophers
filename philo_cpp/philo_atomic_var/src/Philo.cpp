@@ -71,3 +71,70 @@ bool Philo::operator!=(const Philo &other)
 }
 
 Philo::~Philo() {}
+
+std::chrono::milliseconds Philo::get_last_meal() {
+  auto last = std::chrono::steady_clock::time_point(std::chrono::steady_clock::duration(_last_meal.load()));
+  auto diff = std::chrono::steady_clock::now() - last;
+  return std::chrono::duration_cast<std::chrono::milliseconds>(diff);
+}
+
+int Philo::get_total_meals() {
+  return _total_meals.load();
+}
+
+// TODO - Implement FIFO?
+void Philo::message(char *message) {
+  if (_data.end.load())
+    return;
+  bool expect = true;
+  while (!_data.write.compare_exchange_strong(expect, false)) {
+    expect = true;
+    std::this_thread::yield();
+  }
+  auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+                      std::chrono::steady_clock::now() - _data.start)
+                      .count();
+  std::cout << timestamp << " " << _id << " " << message << "\n";
+  _data.write.store(true);
+}
+
+void Philo::think() {
+  auto think = get_last_meal();
+  if (think < MIN_THINK_THRESHOLD)
+    return;
+  message(SLEEP_MSG);
+  std::this_thread::sleep_for(think / THINK_FACTOR);
+}
+
+void Philo::eat() {
+  if (_data.philos == 1) {
+    _data.forks[_left_fork].store(false);
+    message(FORK_MSG);
+    std::this_thread::sleep_for(_data.time_to_die);
+    return;
+  }
+
+  bool expect = true;
+  while (!_data.forks[_left_fork].compare_exchange_strong(expect, false)) {
+    expect = true;
+    std::this_thread::yield();
+  }
+  message(FORK_MSG);
+  while (!_data.forks[_right_fork].compare_exchange_strong(expect, false))
+  {
+    expect = true;
+    std::this_thread::yield();
+  }
+  message(FORK_MSG);
+
+  message(EAT_MSG);
+  std::this_thread::sleep_for(_data.time_to_eat);
+  if (_data.end.load())
+    return;
+  ++_total_meals;
+}
+
+void Philo::sleep() {
+  message(SLEEP_MSG);
+  std::this_thread::sleep_for(_data.time_to_sleep);
+}

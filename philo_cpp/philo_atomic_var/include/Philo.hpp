@@ -6,13 +6,13 @@
 #define MIN_THINK_THRESHOLD std::chrono::milliseconds(100)
 #define THINK_FACTOR 2
 #define START_TIME_LAG 10
-#define FORK_MSG "has taken a fork"
-#define EAT_MSG "is eating"
-#define SLEEP_MSG "is sleeping"
-#define THINK_MSG "is thinking"
-#define DEAD_MSG "died"
+const char *const FORK_MSG = "has taken a fork";
+const char *const EAT_MSG = "is eating";
+const char *const SLEEP_MSG = "is sleeping";
+const char *const THINK_MSG = "is thinking";
+const char *const DEAD_MSG = "died";
 
-class Philo{
+class Philo {
   private:
     int _id;
     int _left_fork;
@@ -32,7 +32,7 @@ class Philo{
     ~Philo();
     std::chrono::milliseconds get_last_meal();
     int get_total_meals();
-    void message(char *message);
+    void message(const char *message);
     void think();
     void eat();
     void sleep();

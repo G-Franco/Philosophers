@@ -50,7 +50,7 @@ struct data {
     meals = copy.meals;
     end.store(copy.end.load());
     write.store(copy.write.load());
-    forks.resize(philos);
+    forks = std::vector<std::atomic<bool>>();
     for (auto i = 0; i < philos; i++)
       forks[i].store(copy.forks[i].load());
     return *this;

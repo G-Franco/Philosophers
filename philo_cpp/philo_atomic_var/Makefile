@@ -2,7 +2,7 @@
 NAME =	philo
 DEBUG =	philo_debug
 DEBUG_T =	philo_debug_thread
-SRC =	src/main.cpp src/Philo.cpp
+SRC =	src/main.cpp src/Philo.cpp src/philo_helper.cpp
 CC =	@g++
 CFLAGS = -Wall -Wextra -Werror -pedantic -Wshadow -std=c++11
 CFLAGS_D = -Wall -Wextra -Werror -pedantic -Wshadow -g -std=c++11 -fsanitize=address,undefined
@@ -34,7 +34,7 @@ $(DEBUG_T):	$(SRC)
 test:	$(TEST)
 
 $(TEST):	$(SRC) $(TEST_SRC) $(GTEST_SRC)
-            $(CC) $(CFLAGS) $(CFLAGS_TEST) $^ -o $@
+					$(CC) $(CFLAGS) $(CFLAGS_TEST) $^ -o $@
 
 fclean:
 					@rm -f $(NAME) $(DEBUG) $(DEBUG_T)

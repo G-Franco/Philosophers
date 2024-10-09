@@ -27,12 +27,16 @@ int check_input(int ac, char **av, data &data) {
       data.time_to_sleep <= std::chrono::milliseconds(0) ||
       (ac == 6 && data.meals <= 0))
     throw(std::runtime_error("ERROR: " + USAGE_MESSAGE));
+  return 0;
 }
 
 int philo_atom(int ac, char **av, data &data) {
-  try {
+  try
+  {
     check_input(ac, av, data);
-  } catch (const std::exception &e) {
+  }
+  catch (const std::exception &e)
+  {
     std::cerr << e.what() << '\n';
     return 1;
   }
@@ -50,9 +54,9 @@ int philo_atom(int ac, char **av, data &data) {
   try {
     for (int i = 0; i < data.philos; i++) {
       philosophers.emplace_back(i, data);
-      threads.emplace_back(philo_life, std::ref(philosophers.back()), data);
+      threads.emplace_back(philo_life, std::ref(philosophers.back()), std::ref(data));
     }
-    threads.emplace_back(overseer, std::ref(philosophers), data);
+    threads.emplace_back(overseer, std::ref(philosophers), std::ref(data));
   } catch (...) {
     std::cerr << "Error while creating threads or philosophers.\n";
     return 1;

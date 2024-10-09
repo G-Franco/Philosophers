@@ -60,7 +60,7 @@ Philo &Philo::operator=(Philo &&move) noexcept
 
 bool Philo::operator==(const Philo &other)
 {
-  if (this->_id = other._id)
+  if (_id == other._id)
     return true;
   return false;
 }
@@ -83,7 +83,7 @@ int Philo::get_total_meals() {
 }
 
 // TODO - Implement FIFO?
-void Philo::message(char *message) {
+void Philo::message(const char *message) {
   if (_data.end.load())
     return;
   bool expect = true;

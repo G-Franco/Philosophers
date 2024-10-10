@@ -73,8 +73,8 @@ bool Philo::operator!=(const Philo &other)
 Philo::~Philo() {}
 
 std::chrono::milliseconds Philo::get_last_meal() {
-  auto last = std::chrono::steady_clock::time_point(std::chrono::steady_clock::duration(_last_meal.load()));
-  auto diff = std::chrono::steady_clock::now() - last;
+  auto now = std::chrono::steady_clock::now();
+  auto diff = now - (std::chrono::milliseconds(_last_meal.load()) +_data.start);
   return std::chrono::duration_cast<std::chrono::milliseconds>(diff);
 }
 
@@ -128,6 +128,9 @@ void Philo::eat() {
   message(FORK_MSG);
 
   message(EAT_MSG);
+  auto now = std::chrono::steady_clock::now();
+  auto dif = std::chrono::duration_cast<std::chrono::milliseconds>(now - _data.start).count();
+  _last_meal.store(dif);
   std::this_thread::sleep_for(_data.time_to_eat);
   if (_data.end.load())
     return;

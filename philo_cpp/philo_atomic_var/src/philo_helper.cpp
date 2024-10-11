@@ -69,13 +69,14 @@ int philo_atom(int ac, char **av, data &data) {
   return 1;
 }
 
-void overseer(std::vector<Philo> philosophers, data &data) {
+void overseer(std::vector<Philo> &philosophers, data &data) {
   bool all_ate;
   while (1) {
     all_ate = true;
     for (Philo &philo : philosophers)
     {
       if (philo.get_last_meal() >= data.time_to_die) {
+        philo.message(DEAD_MSG);
         data.end.store(true);
         data.ok_end = false;
         return;
@@ -92,6 +93,13 @@ void overseer(std::vector<Philo> philosophers, data &data) {
 
 void philo_life(Philo &philo, data &data) {
   std::this_thread::sleep_until(data.start);
+  if (data.philos == 1) {
+    data.forks[0].store(false);
+    philo.message(FORK_MSG);
+    std::this_thread::sleep_for(data.time_to_die);
+    return;
+  }
+
   while (!data.end.load()) {
     philo.think();
     philo.eat();

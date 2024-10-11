@@ -102,27 +102,24 @@ void Philo::think() {
   auto think = get_last_meal();
   if (think < MIN_THINK_THRESHOLD)
     return;
-  message(SLEEP_MSG);
+  message(THINK_MSG);
   std::this_thread::sleep_for(think / THINK_FACTOR);
 }
 
 void Philo::eat() {
-  if (_data.philos == 1) {
-    _data.forks[_left_fork].store(false);
-    message(FORK_MSG);
-    std::this_thread::sleep_for(_data.time_to_die);
-    return;
-  }
-
   bool expect = true;
   while (!_data.forks[_left_fork].compare_exchange_strong(expect, false)) {
     expect = true;
+    if (_data.end.load())
+      return;
     std::this_thread::yield();
   }
   message(FORK_MSG);
   while (!_data.forks[_right_fork].compare_exchange_strong(expect, false))
   {
     expect = true;
+    if (_data.end.load())
+      return;
     std::this_thread::yield();
   }
   message(FORK_MSG);
@@ -132,6 +129,8 @@ void Philo::eat() {
   auto dif = std::chrono::duration_cast<std::chrono::milliseconds>(now - _data.start).count();
   _last_meal.store(dif);
   std::this_thread::sleep_for(_data.time_to_eat);
+  _data.forks[_left_fork].store(true);
+  _data.forks[_right_fork].store(true);
   if (_data.end.load())
     return;
   ++_total_meals;

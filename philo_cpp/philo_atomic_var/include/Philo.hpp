@@ -3,7 +3,8 @@
 #include <iostream>
 #include <thread>
 
-#define MIN_THINK_THRESHOLD std::chrono::milliseconds(100)
+#define MIN_THINK std::chrono::milliseconds(100)
+#define MAX_THINK std::chrono::milliseconds(200)
 #define THINK_FACTOR 2
 #define START_TIME_LAG 10
 const char *const FORK_MSG = "has taken a fork";

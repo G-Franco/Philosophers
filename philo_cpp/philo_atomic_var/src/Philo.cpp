@@ -74,7 +74,7 @@ Philo::~Philo() {}
 
 std::chrono::milliseconds Philo::get_last_meal() {
   auto now = std::chrono::steady_clock::now();
-  auto diff = now - (std::chrono::milliseconds(_last_meal.load()) +_data.start);
+  auto diff = now - _data.start - std::chrono::milliseconds(_last_meal.load());
   return std::chrono::duration_cast<std::chrono::milliseconds>(diff);
 }
 
@@ -99,11 +99,14 @@ void Philo::message(const char *message) {
 }
 
 void Philo::think() {
-  auto think = get_last_meal();
-  if (think < MIN_THINK_THRESHOLD)
-    return;
+  auto last = get_last_meal();
+  auto think = (_data.time_to_die - last - _data.time_to_eat) / THINK_FACTOR;
+  if (think < MIN_THINK)
+    think = std::chrono::milliseconds(0);
+  else if (think > _data.time_to_die / 2)
+    think = MAX_THINK;
   message(THINK_MSG);
-  std::this_thread::sleep_for(think / THINK_FACTOR);
+  std::this_thread::sleep_for(think);
 }
 
 void Philo::eat() {

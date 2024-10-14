@@ -13,7 +13,7 @@ const std::string USAGE_MESSAGE =
 
 int check_input(int ac, char **av, data &data) {
   if (ac < 5 || ac > 6)
-    throw(std::runtime_error("ERROR: " + USAGE_MESSAGE));
+    throw(std::invalid_argument("bad arguments"));
 
   data.philos = std::stoi(av[1]);
   data.time_to_die = std::chrono::milliseconds(std::stoi(av[2]));
@@ -26,7 +26,7 @@ int check_input(int ac, char **av, data &data) {
       data.time_to_eat <= std::chrono::milliseconds(0) ||
       data.time_to_sleep <= std::chrono::milliseconds(0) ||
       (ac == 6 && data.meals <= 0))
-    throw(std::runtime_error("ERROR: " + USAGE_MESSAGE));
+    throw(std::invalid_argument("bad arguments"));
   return 0;
 }
 
@@ -37,7 +37,7 @@ int philo_atom(int ac, char **av, data &data) {
   }
   catch (const std::exception &e)
   {
-    std::cerr << e.what() << '\n';
+    std::cerr << "ERROR: " + USAGE_MESSAGE << '\n';
     return 1;
   }
 

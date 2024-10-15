@@ -31,6 +31,7 @@ class Philo {
     bool operator==(const Philo &other);
     bool operator!=(const Philo &other);
     ~Philo();
+    int get_id();
     std::chrono::milliseconds get_last_meal();
     int get_total_meals();
     void message(const char *message);

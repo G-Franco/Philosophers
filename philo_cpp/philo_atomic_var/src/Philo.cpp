@@ -72,7 +72,11 @@ bool Philo::operator!=(const Philo &other)
 
 Philo::~Philo() {}
 
-std::chrono::milliseconds Philo::get_last_meal() {
+int Philo::get_id() {
+  return _id;
+}
+
+    std::chrono::milliseconds Philo::get_last_meal() {
   auto now = std::chrono::steady_clock::now();
   auto diff = now - _data.start - std::chrono::milliseconds(_last_meal.load());
   return std::chrono::duration_cast<std::chrono::milliseconds>(diff);

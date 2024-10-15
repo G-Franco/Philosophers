@@ -88,6 +88,7 @@ void overseer(std::vector<Philo> &philosophers, data &data) {
       data.end.store(true);
       return;
     }
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
 }
 
@@ -98,6 +99,12 @@ void philo_life(Philo &philo, data &data) {
     philo.message(FORK_MSG);
     std::this_thread::sleep_for(data.time_to_die);
     return;
+  }
+
+  // Stagger start
+  if (philo.get_id() % 2) {
+    philo.eat();
+    philo.sleep();
   }
 
   while (!data.end.load()) {

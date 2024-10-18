@@ -42,19 +42,66 @@ struct data {
             fork.store(true);
   }
 
-  data &operator=(const data &copy)
+  data(const data &copy)
+      : philos(copy.philos),
+        time_to_die(copy.time_to_die),
+        time_to_eat(copy.time_to_eat),
+        time_to_sleep(copy.time_to_sleep),
+        start(copy.start),
+        meals(copy.meals),
+        end(copy.end.load()),
+        ok_end(copy.ok_end),
+        forks(copy.forks.size()),
+        write(copy.write.load()) {
+          for (size_t i = 0; i < copy.forks.size(); ++i) {
+            forks[i].store(copy.forks[i].load());
+          }
+  }
+
+  data &operator=(const data &copy) {
+    if (this != &copy) {
+      philos = copy.philos;
+      time_to_die = copy.time_to_die;
+      time_to_eat = copy.time_to_eat;
+      time_to_sleep = copy.time_to_sleep;
+      start = copy.start;
+      meals = copy.meals;
+      end.store(copy.end.load());
+      ok_end = copy.ok_end;
+      write.store(copy.write.load());
+      forks = std::vector<std::atomic<bool>>(copy.forks.size());
+      for (size_t i = 0; i < copy.forks.size(); ++i) {
+        forks[i].store(copy.forks[i].load());
+      }
+    }
+    return *this;
+  }
+
+  data(data &&move) noexcept
+      : philos(move.philos),
+        time_to_die(move.time_to_die),
+        time_to_eat(move.time_to_eat),
+        time_to_sleep(move.time_to_sleep),
+        start(move.start),
+        meals(move.meals),
+        end(move.end.load()),
+        ok_end(move.ok_end),
+        forks(std::move(move.forks)),
+        write(move.write.load()) {}
+
+  data &operator=(data &&move) noexcept
   {
-    philos = copy.philos;
-    time_to_die = copy.time_to_die;
-    time_to_eat = copy.time_to_eat;
-    time_to_sleep = copy.time_to_sleep;
-    start = copy.start;
-    meals = copy.meals;
-    end.store(copy.end.load());
-    write.store(copy.write.load());
+    philos = move.philos;
+    time_to_die = move.time_to_die;
+    time_to_eat = move.time_to_eat;
+    time_to_sleep = move.time_to_sleep;
+    start = move.start;
+    meals = move.meals;
+    end.store(move.end.load());
+    write.store(move.write.load());
     forks = std::vector<std::atomic<bool>>();
     for (auto i = 0; i < philos; i++)
-      forks[i].store(copy.forks[i].load());
+      forks[i].store(move.forks[i].load());
     return *this;
   }
 };

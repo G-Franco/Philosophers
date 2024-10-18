@@ -11,7 +11,7 @@ const std::string USAGE_MESSAGE =
     "USE ONLY POSITIVE INTEGERS\n"
     "TIMES MUST BE IN ms";
 
-int check_input(int ac, char **av, data &data) {
+void check_input(int ac, char **av, data &data) {
   if (ac < 5 || ac > 6)
     throw(std::invalid_argument("bad arguments"));
 
@@ -27,7 +27,6 @@ int check_input(int ac, char **av, data &data) {
       data.time_to_sleep <= std::chrono::milliseconds(0) ||
       (ac == 6 && data.meals <= 0))
     throw(std::invalid_argument("bad arguments"));
-  return 0;
 }
 
 int philo_atom(int ac, char **av, data &data) {

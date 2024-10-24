@@ -6,7 +6,7 @@
 #define MIN_THINK std::chrono::milliseconds(100)
 #define MAX_THINK std::chrono::milliseconds(200)
 #define THINK_FACTOR 2
-#define START_TIME_LAG 10
+#define START_TIME_LAG 2
 const char *const FORK_MSG = "has taken a fork";
 const char *const EAT_MSG = "is eating";
 const char *const SLEEP_MSG = "is sleeping";

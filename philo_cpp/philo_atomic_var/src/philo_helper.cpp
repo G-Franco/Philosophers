@@ -65,7 +65,7 @@ int philo_atom(int ac, char **av, data &data) {
     thread.join();
   if (data.ok_end)
     return 0;
-  return 1;
+  return 2;
 }
 
 void overseer(std::vector<Philo> &philosophers, data &data) {
@@ -83,7 +83,8 @@ void overseer(std::vector<Philo> &philosophers, data &data) {
       if (data.meals && philo.get_total_meals() < data.meals)
         all_ate = false;
     }
-    if (data.meals && all_ate) {
+    if ((data.meals && all_ate) ||
+        std::chrono::steady_clock::now() - data.start >= data.max_duration) {
       data.end.store(true);
       return;
     }
@@ -102,13 +103,12 @@ void philo_life(Philo &philo, data &data) {
 
   // Stagger start
   if (philo.get_id() % 2) {
-    philo.eat();
-    philo.sleep();
+    philo.think();
   }
 
   while (!data.end.load()) {
-    philo.think();
     philo.eat();
     philo.sleep();
+    philo.think();
   }
 }

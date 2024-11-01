@@ -1,7 +1,7 @@
 #include "../include/Philo.hpp"
 
 Philo::Philo(int id, data &data)
-    : _id(++id),
+    : _id(id + 1),
       _left_fork(_id % 2 ? _id - 1 : _id % data.philos),
       _right_fork(_id % 2 ? _id % data.philos : _id - 1),
       _data(data),
@@ -58,14 +58,12 @@ Philo &Philo::operator=(Philo &&move) noexcept
   return *this;
 }
 
-bool Philo::operator==(const Philo &other)
+bool Philo::operator==(const Philo &other) const
 {
-  if (_id == other._id)
-    return true;
-  return false;
+  return _id == other._id;
 }
 
-bool Philo::operator!=(const Philo &other)
+bool Philo::operator!=(const Philo &other) const
 {
   return !(*this == other);
 }
@@ -76,30 +74,24 @@ int Philo::get_id() {
   return _id;
 }
 
-    std::chrono::milliseconds Philo::get_last_meal() {
-  auto now = std::chrono::steady_clock::now();
-  auto diff = now - _data.start - std::chrono::milliseconds(_last_meal.load());
-  return std::chrono::duration_cast<std::chrono::milliseconds>(diff);
+std::chrono::milliseconds Philo::get_last_meal() {
+  auto simulation_time = std::chrono::duration_cast<std::chrono::milliseconds>((std::chrono::steady_clock::now() - _data.start));
+  auto diff = simulation_time - std::chrono::milliseconds(_last_meal.load());
+  return diff;
 }
 
 int Philo::get_total_meals() {
   return _total_meals.load();
 }
 
-// TODO - Implement FIFO?
 void Philo::message(const char *message) {
+  std::lock_guard<std::mutex> write(_data.write);
   if (_data.end.load())
     return;
-  bool expect = true;
-  while (!_data.write.compare_exchange_strong(expect, false)) {
-    expect = true;
-    std::this_thread::yield();
-  }
   auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
                       std::chrono::steady_clock::now() - _data.start)
                       .count();
   std::cout << timestamp << " " << _id << " " << message << "\n";
-  _data.write.store(true);
 }
 
 void Philo::think() {
@@ -132,9 +124,9 @@ void Philo::eat() {
   message(FORK_MSG);
 
   message(EAT_MSG);
-  auto now = std::chrono::steady_clock::now();
-  auto dif = std::chrono::duration_cast<std::chrono::milliseconds>(now - _data.start).count();
-  _last_meal.store(dif);
+  auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+                     std::chrono::steady_clock::now() - _data.start).count();
+  _last_meal.store(elapsed);
   std::this_thread::sleep_for(_data.time_to_eat);
   _data.forks[_left_fork].store(true);
   _data.forks[_right_fork].store(true);

@@ -56,6 +56,7 @@ int philo_atom(int ac, char **av, data &data) {
       threads.emplace_back(philo_life, std::ref(philosophers.back()), std::ref(data));
     }
     threads.emplace_back(overseer, std::ref(philosophers), std::ref(data));
+    // threads.emplace_back(message_handler, std::ref(data));
   } catch (...) {
     std::cerr << "Error while creating threads or philosophers.\n";
     return 1;
@@ -67,6 +68,16 @@ int philo_atom(int ac, char **av, data &data) {
     return 0;
   return 2;
 }
+
+// void message_handler(data &data) {
+//   std::string message;
+//   while (!data.end.load())
+//   {
+//     while (data.message_list.pop(message))
+//       std::cout << message << "\n";
+//     std::this_thread::sleep_for(std::chrono::milliseconds(1));
+//   }
+// }
 
 void overseer(std::vector<Philo> &philosophers, data &data) {
   bool all_ate;
@@ -88,7 +99,6 @@ void overseer(std::vector<Philo> &philosophers, data &data) {
       data.end.store(true);
       return;
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
 }
 

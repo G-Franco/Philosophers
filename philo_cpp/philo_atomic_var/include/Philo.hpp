@@ -28,8 +28,8 @@ class Philo {
     Philo &operator=(const Philo &copy);
     Philo(Philo &&move) noexcept;
     Philo &operator=(Philo &&move) noexcept;
-    bool operator==(const Philo &other);
-    bool operator!=(const Philo &other);
+    bool operator==(const Philo &other) const;
+    bool operator!=(const Philo &other) const;
     ~Philo();
     int get_id();
     std::chrono::milliseconds get_last_meal();
